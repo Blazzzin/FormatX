@@ -38,5 +38,10 @@ def image():
     
     return render_template('image.html')
 
+@app.route('/pdf-merge', methods=['GET', 'POST'])
+def pdf_merge():
+    # Implement your PDF merge logic here
+    return render_template('pdf-merge.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,19 @@
+.file-upload-section {
+    margin: 20px;
+}
+
+.file-list {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+.file-item {
+    padding: 8px;
+    margin: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    cursor: move;
+}

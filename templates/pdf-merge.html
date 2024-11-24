@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="stylesheet" href="/static/pdf-merge.css">
+    <title>Merge PDFs</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo">FormatX</div>
+        <nav>
+            <a href="./">Home</a>
+            <a href="/pdf-merge" class="active">Merge PDFs</a>
+            <a href="/pdf-split">Split PDFs</a>
+            <a href="/pdf-to-docx">PDF to Word</a>
+            <a href="/pdf-organize">Organize PDFs</a>
+            <a href="/image">Convert Images</a>
+        </nav>
+    </header>
+    <br><br><br><br><br><br>
+    <!-- File Upload Section -->
+    <div class="file-upload-section">
+        <input type="file" id="file-input" accept=".pdf" multiple>
+        <div id="file-list" class="file-list" multiple>
+            <!-- Uploaded files will appear here -->
+        </div>
+    </div>
+
+    <!-- Footer Section
+    <footer>
+        <p>&copy; 2024 FormatX. All Rights Reserved.</p>
+    </footer> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script>
+        // Handle file input and drag-and-drop functionality
+        document.getElementById('file-input').addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            const fileListContainer = document.getElementById('file-list');
+            fileListContainer.innerHTML = ""; // Clear any existing file list
+
+            Array.from(files).forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.classList.add('file-item');
+                fileItem.setAttribute('draggable', 'true');
+                fileItem.textContent = file.name;
+
+                // Store the file reference in the item (optional, but useful for later)
+                fileItem.file = file;
+
+                // Append to the file list
+                fileListContainer.appendChild(fileItem);
+            });
+
+            // Enable drag-and-drop functionality using the Sortable library
+            new Sortable(fileListContainer, {
+                animation: 150,
+                onEnd(evt) {
+                    console.log("Rearranged file list:", evt.from);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

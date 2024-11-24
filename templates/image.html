@@ -5,22 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/index.css">
-    <link rel="stylesheet" href="/static/image.css">
     <title>Convert Images</title>
 </head>
 
 <body>
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-    <nav class="vertical-menu" id="verticalMenu">
-        <div class="nav-links">
-            <a href="./" class="active"><b>Home</b></a>
-            <a href="/image"><b>Convert Images</b></a>
-            <a href="/pdf-merge"><b>Merge PDFs</b></a>
-            <a href="/pdf-split"><b>Split PDFs</b></a>
-            <a href="/pdf-to-docx"><b>PDF to Word</b></a>
-            <a href="/pdf-organize"><b>Organize PDFs</b></a>
-        </div>
-    </nav>
+    <header>
+        <div class="logo">FormatX</div>
+        <nav>
+            <a href="./">Home</a>
+            <a href="/image" class="active">Convert Images</a>
+            <a href="/pdf-merge">Merge PDFs</a>
+            <a href="/pdf-split">Split PDFs</a>
+            <a href="/pdf-to-docx">PDF to Word</a>
+            <a href="/pdf-organize">Organize PDFs</a>
+        </nav>
+    </header>
     <h1><center>CONVERT YOUR IMAGES</center></h1>
     <form action="/image" method="post" enctype="multipart/form-data">
         <label for="file">Choose An Image:</label>
