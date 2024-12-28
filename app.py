@@ -1,47 +1,66 @@
-from flask import Flask, request, render_template, send_file
+from flask import Flask, request, render_template, send_file, jsonify
 import os
-from converters.image import convert_image, selected_options
+from PyPDF2 import PdfMerger
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure uploads directory exists
+# Directories for uploaded and merged files
+UPLOAD_FOLDER = 'uploads'
+MERGED_FOLDER = 'merged'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MERGED_FOLDER'] = MERGED_FOLDER
+
+# Ensure the directories exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(MERGED_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/image', methods=['GET', 'POST'])
-def image():
-    if request.method == 'POST':
-        file = request.files['file']
-        conversion_type = request.form.get('conversion_type')
-
-        if file and conversion_type:
-            filename = file.filename
-            input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(input_path)
-
-            extension = selected_options(conversion_type)
-            if extension is None:
-                return "Invalid conversion type", 400
-
-            base, _ = os.path.splitext(input_path)
-            output_path = base + extension
-            
-            convert_image(input_path, output_path)
-            return send_file(output_path, as_attachment=True)
-        
-        return "No file or conversion type selected", 400
-    
-    return render_template('image.html')
-
 @app.route('/pdf-merge', methods=['GET', 'POST'])
 def pdf_merge():
-    # Implement your PDF merge logic here
+    if request.method == 'POST':
+        if 'files[]' not in request.files:
+            return jsonify({"error": "No files uploaded"}), 400
+
+        files = request.files.getlist('files[]')
+        if not files or all(file.filename == '' for file in files):
+            return jsonify({"error": "No valid files uploaded"}), 400
+
+        # Save uploaded PDF files
+        saved_files = []
+        for file in files:
+            if file.filename.endswith('.pdf'):
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+                file.save(file_path)
+                saved_files.append(file_path)
+
+        # Merge PDFs using PyPDF2
+        if saved_files:
+            merger = PdfMerger()
+            for file_path in saved_files:
+                merger.append(file_path)
+
+            merged_file_path = os.path.join(app.config['MERGED_FOLDER'], 'merged_output.pdf')
+            merger.write(merged_file_path)
+            merger.close()
+
+            # Clean up individual uploaded files if needed
+            for file_path in saved_files:
+                os.remove(file_path)
+
+            # Return a JSON response with the download URL for the merged PDF
+            return jsonify({"message": "PDFs merged successfully", "merged_file_url": f'/download/{os.path.basename(merged_file_path)}'})
+
+        return jsonify({"error": "No PDFs to merge"}), 400
+
     return render_template('pdf-merge.html')
+
+@app.route('/download/<filename>')
+def download(filename):
+    merged_file_path = os.path.join(app.config['MERGED_FOLDER'], filename)
+    return send_file(merged_file_path, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)

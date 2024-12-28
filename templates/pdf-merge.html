@@ -16,56 +16,188 @@
             <a href="./">Home</a>
             <a href="/pdf-merge" class="active">Merge PDFs</a>
             <a href="/pdf-split">Split PDFs</a>
-            <a href="/pdf-to-docx">PDF to Word</a>
             <a href="/pdf-organize">Organize PDFs</a>
+            <a href="/pdf-to-docx">Convert</a>
             <a href="/image">Convert Images</a>
         </nav>
     </header>
-    <br><br><br><br><br><br>
-    <!-- File Upload Section -->
+    <main>
+        <section class="intro">
+            <h1>Merge Multiple PDFs Into One</h1>
+            <p>
+                With our PDF Merge tool, combining multiple PDF files into a single document has never been easier.
+                Simply follow these steps:
+            </p>
+            <ul>
+                <li><strong>Upload Your Files:</strong> Click the "Upload Files" button to select multiple PDF files
+                    from your device. You can select a maximum of 20 files from your device.</li>
+                <li><strong>Arrange the Files:</strong> Once the files are uploaded, you can easily reorder them by
+                    dragging and dropping. Arrange them in the sequence you want the final document to appear.</li>
+                <li><strong>Preview the Files:</strong> Each file has a little preview of the first page so that you
+                    know you are confidently rearranging the correct file in the correct order.</li>
+                <li><strong>Merge the PDFs:</strong> When you're happy with the order and the previews, simply click the
+                    "Merge PDFs" button to combine all selected files into a single PDF.</li>
+                <li><strong>Download the Final Document:</strong> Once the merge is complete, the final newly merged PDF
+                    will be downloaded onto your device!</li>
+            </ul>
+            <p>
+                This tool is perfect for combining contracts, reports, or any collection of PDF documents into one
+                convenient file. Whether you’re managing work documents or personal files, our simple and intuitive
+                interface will help you get the job done in just a few clicks!
+            </p>
+        </section>
+    </main>
+
     <div class="file-upload-section">
-        <input type="file" id="file-input" accept=".pdf" multiple>
-        <div id="file-list" class="file-list" multiple>
-            <!-- Uploaded files will appear here -->
-        </div>
+        <form id="mergeForm" action="/pdf-merge" method="POST" enctype="multipart/form-data">
+            <div class="button-container">
+                <label for="file-input" class="custom-file-upload">Upload Files</label>
+                <button type="button" class="clear-files">Clear All Files</button>
+            </div>
+            <input type="file" id="file-input" name="files[]" accept="application/pdf" multiple>
+            <p id="file-limit-message" style="color: red; display: none;">Maximum of 20 files allowed*</p>
+            <center>
+                <div id="file-list" class="file-list">
+                    <p id="default-text">No files uploaded yet. Use the upload button above.</p>
+                </div>
+            </center>
+            <center><button type="submit" class="merge-button" disabled>Merge PDFs</button></center>
+        </form>
     </div>
 
-    <!-- Footer Section
-    <footer>
-        <p>&copy; 2024 FormatX. All Rights Reserved.</p>
-    </footer> -->
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
     <script>
-        // Handle file input and drag-and-drop functionality
-        document.getElementById('file-input').addEventListener('change', handleFileSelect);
+        const MAX_FILES = 20;
+        let filesList = [];
+
+        const fileInput = document.getElementById('file-input');
+        const fileListContainer = document.getElementById('file-list');
+        const defaultText = document.getElementById('default-text');
+        const fileLimitMessage = document.getElementById('file-limit-message');
+        const mergeButton = document.querySelector('.merge-button');
+
+        fileInput.addEventListener('change', handleFileSelect);
 
         function handleFileSelect(event) {
-            const files = event.target.files;
-            const fileListContainer = document.getElementById('file-list');
-            fileListContainer.innerHTML = ""; // Clear any existing file list
+            const files = Array.from(event.target.files);
 
-            Array.from(files).forEach((file, index) => {
-                const fileItem = document.createElement('div');
-                fileItem.classList.add('file-item');
-                fileItem.setAttribute('draggable', 'true');
-                fileItem.textContent = file.name;
+            if (filesList.length + files.length > MAX_FILES) {
+                fileLimitMessage.style.display = 'block';
+                return;
+            }
 
-                // Store the file reference in the item (optional, but useful for later)
-                fileItem.file = file;
+            fileLimitMessage.style.display = 'none';
+            if (defaultText) defaultText.remove();
 
-                // Append to the file list
-                fileListContainer.appendChild(fileItem);
+            files.forEach(file => {
+                if (!filesList.some(existingFile => existingFile.name === file.name)) {
+                    filesList.push(file);
+
+                    const fileItem = document.createElement('div');
+                    fileItem.classList.add('file-item');
+                    fileItem.textContent = file.name;
+
+                    // Add "X" button to remove the file
+                    const removeButton = document.createElement('button');
+                    removeButton.classList.add('remove-file');
+                    removeButton.textContent = 'X';
+                    removeButton.title = 'Remove this file';
+
+                    // Remove the file when the "X" button is clicked
+                    removeButton.addEventListener('click', () => {
+                        filesList = filesList.filter(f => f.name !== file.name);
+                        fileItem.remove();
+                        if (filesList.length === 0) {
+                            fileListContainer.innerHTML = '<p id="default-text">No files uploaded yet. Drag and drop files here or use the upload button above.</p>';
+                        }
+                        mergeButton.disabled = filesList.length === 0;
+                    });
+
+                    fileItem.appendChild(removeButton);
+
+                    const previewContainer = document.createElement('div');
+                    previewContainer.classList.add('pdf-preview-container');
+                    fileItem.appendChild(previewContainer);
+
+                    fileItem.file = file;
+                    fileListContainer.appendChild(fileItem);
+
+                    renderPDFPreview(file, previewContainer);
+                }
             });
 
-            // Enable drag-and-drop functionality using the Sortable library
+            enableDragAndDrop();
+            mergeButton.disabled = filesList.length === 0;
+        }
+
+        function renderPDFPreview(file, container) {
+            if (file.type !== 'application/pdf') return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const pdfData = new Uint8Array(e.target.result);
+                pdfjsLib.getDocument(pdfData).promise.then(pdf => {
+                    pdf.getPage(1).then(page => {
+                        const scale = 1.5;
+                        const viewport = page.getViewport({ scale });
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        page.render({ canvasContext: context, viewport }).promise.then(() => {
+                            container.appendChild(canvas);
+                        });
+                    });
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function enableDragAndDrop() {
             new Sortable(fileListContainer, {
                 animation: 150,
-                onEnd(evt) {
-                    console.log("Rearranged file list:", evt.from);
+                onEnd: () => {
+                    filesList = Array.from(fileListContainer.children).map(item => item.file);
                 }
             });
         }
+
+        document.querySelector('.clear-files').addEventListener('click', () => {
+            filesList = [];
+            fileListContainer.innerHTML = '<p id="default-text">No files uploaded yet. Use the upload button above.</p>';
+            fileLimitMessage.style.display = 'none';
+            mergeButton.disabled = true;
+        });
+
+        document.getElementById('mergeForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            filesList.forEach(file => formData.append('files[]', file));
+
+            fetch('/pdf-merge', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.merged_file_url) {
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = data.merged_file_url;
+                        downloadLink.download = 'merged_output.pdf';
+                        downloadLink.click();
+                        alert('PDFs merged successfully!');
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error merging PDFs');
+                });
+        });
     </script>
 </body>
 
