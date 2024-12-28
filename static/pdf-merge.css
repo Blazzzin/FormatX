@@ -126,3 +126,7 @@
     background-color: #0056b3;
     transform: scale(1.05);
 }
+
+.default-text-class {
+    margin-top: 120px;
+}
