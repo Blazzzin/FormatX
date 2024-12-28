@@ -58,7 +58,8 @@
             <p id="file-limit-message" style="color: red; display: none;">Maximum of 20 files allowed*</p>
             <center>
                 <div id="file-list" class="file-list">
-                    <p id="default-text">No files uploaded yet. Use the upload button above.</p>
+                    <p id="default-text" class="default-text-class">No files uploaded yet. Use the upload button above.
+                    </p>
                 </div>
             </center>
             <center><button type="submit" class="merge-button" disabled>Merge PDFs</button></center>
@@ -88,7 +89,11 @@
             }
 
             fileLimitMessage.style.display = 'none';
-            if (defaultText) defaultText.remove();
+
+            const existingDefaultText = document.getElementById('default-text');
+            if (existingDefaultText) {
+                existingDefaultText.remove();
+            }
 
             files.forEach(file => {
                 if (!filesList.some(existingFile => existingFile.name === file.name)) {
@@ -109,7 +114,11 @@
                         filesList = filesList.filter(f => f.name !== file.name);
                         fileItem.remove();
                         if (filesList.length === 0) {
-                            fileListContainer.innerHTML = '<p id="default-text">No files uploaded yet. Drag and drop files here or use the upload button above.</p>';
+                            const placeholderText = document.createElement('p');
+                            placeholderText.id = 'default-text';
+                            placeholderText.className = 'default-text-class';
+                            placeholderText.textContent = 'No files uploaded yet. Use the upload button above.';
+                            fileListContainer.appendChild(placeholderText);
                         }
                         mergeButton.disabled = filesList.length === 0;
                     });
@@ -163,13 +172,6 @@
                 }
             });
         }
-
-        // document.querySelector('.clear-files').addEventListener('click', () => {
-        //     filesList = [];
-        //     fileListContainer.innerHTML = '<p id="default-text">No files uploaded yet. Use the upload button above.</p>';
-        //     fileLimitMessage.style.display = 'none';
-        //     mergeButton.disabled = true;
-        // });
 
         document.getElementById('mergeForm').addEventListener('submit', function (event) {
             event.preventDefault();
