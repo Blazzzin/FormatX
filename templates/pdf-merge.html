@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/index.css">
     <link rel="stylesheet" href="/static/pdf-merge.css">
-    <title>Merge PDFs</title>
+    <title>FormatX | Merge PDF</title>
+    <link rel="icon" href="/static/assets/logo.png">
 </head>
 
 <body>
@@ -15,8 +16,8 @@
         <nav>
             <a href="./">Home</a>
             <a href="/pdf-merge" class="active">Merge PDF</a>
-            <a href="/pdf-split">Split PDF</a>
             <a href="/pdf-organize">Re-Organize PDF</a>
+            <a href="/pdf-split">Split PDF</a>
             <a href="/pdf-to-docx">Convert PDF</a>
             <!-- <a href="/image">Convert Images</a> -->
         </nav>
@@ -114,11 +115,7 @@
                         filesList = filesList.filter(f => f.name !== file.name);
                         fileItem.remove();
                         if (filesList.length === 0) {
-                            const placeholderText = document.createElement('p');
-                            placeholderText.id = 'default-text';
-                            placeholderText.className = 'default-text-class';
-                            placeholderText.textContent = 'No files uploaded yet. Use the upload button above.';
-                            fileListContainer.appendChild(placeholderText);
+                            window.location.reload();
                         }
                         mergeButton.disabled = filesList.length === 0;
                     });
