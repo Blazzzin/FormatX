@@ -92,4 +92,4 @@ Follow this repository for the latest updates. Visual improvements, new features
 
 ---
 
-Made with by Saheer Multani.
+Made by Saheer Multani.
