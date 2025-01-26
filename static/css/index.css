@@ -53,8 +53,8 @@ header {
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   display: inline-block;
-  transform: scale(1.5); /* Keep the "X" at the final size */
-  margin-left: 2px; /* Adds a small space between "Format" and "X" */
+  transform: scale(1.5);
+  margin-left: 2px; 
 }
 
 /* Navigation menu */
@@ -178,15 +178,15 @@ footer p {
 
 /* Dropdown menu styling */
 .dropdown-menu {
-  display: none; /* Initially hidden */
+  display: none; 
   position: absolute;
-  top: 140%; /* Position below the parent link */
-  left: 15%; /* Align to the left of the parent element */
-  background-color: #34495e; /* Same as the header or nav */
-  min-width: 150px; /* Minimum width for the dropdown */
-  box-sizing: border-box; /* Include padding in the total width calculation */
-  padding: 0; /* Remove any padding */
-  z-index: 1000; /* Ensure it appears above other elements */
+  top: 140%; 
+  left: 15%;
+  background-color: #34495e;
+  min-width: 150px; 
+  box-sizing: border-box; 
+  padding: 0; 
+  z-index: 1000; 
   overflow: hidden;
   text-align: center;
   border-style: ridge;
@@ -196,13 +196,13 @@ footer p {
 .dropdown-menu a {
   display: block;
   color: #ecf0f1;
-  padding: 10px 15px; /* Proper padding for text */
+  padding: 10px 15px; 
   text-decoration: none;
   font-size: 14px;
-  margin: 0; /* Ensure no margin */
-  border: none; /* Remove any border that could create extra space */
+  margin: 0; 
+  border: none; 
   transition: all 0.3s ease;
-  box-sizing: border-box; /* Makes sure padding doesn’t add extra width */
+  box-sizing: border-box; 
 }
 
 /* Remove border on the last menu item */
