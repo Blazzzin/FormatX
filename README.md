@@ -1,4 +1,4 @@
-# Format<span style="color: #1abc9c;">X</span>
+# FormatX
 ### Your All-in-One File Conversion System
 
 Welcome to **FormatX**! This repository houses the ultimate solution for managing and transforming digital documents and images with ease. From conversions to organization, **FormatX** simplifies your workflow, saving you time and effort.
@@ -34,11 +34,11 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 ## 📸 Preview
 
 ### Home Page
-![Home Page Preview](https://via.placeholder.com/800x400?text=Home+Page)  
+![Home Page Preview](./github_assets/home_preview.png)  
 > *The gateway to effortless document management.*
 
-### Conversion Tools
-![Conversion Tools Preview](https://via.placeholder.com/800x400?text=Conversion+Tools)  
+### Merge Tools
+![Merge Tools Preview](./github_assets/merge_preview_1.png)  
 > *Select the desired transformation and let FormatX handle the rest.*
 
 ---
