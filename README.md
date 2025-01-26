@@ -1,4 +1,4 @@
-# FormatX
+# Format<span style="color: #1abc9c;">X</span>
 ### Your All-in-One File Conversion System
 
 Welcome to **FormatX**! This repository houses the ultimate solution for managing and transforming digital documents and images with ease. From conversions to organization, **FormatX** simplifies your workflow, saving you time and effort.
