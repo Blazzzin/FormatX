@@ -1,0 +1,19 @@
+/* Add styles for split boxes */
+.split-box {
+    border: 1px dashed #ccc;
+    padding: 20px;
+    margin: 10px;
+    width: 200px;
+    min-height: 300px;
+    text-align: center;
+    position: relative;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Highlight effect on drag-over */
+.split-box.drag-over {
+    border-color: #0056b3;
+    background-color: #eef6ff;
+}

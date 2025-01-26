@@ -4,7 +4,7 @@ from PyPDF2 import PdfReader, PdfWriter
 
 app = Flask(__name__)
 
-# Directories for uploaded and merged files
+# Directories for uploaded and merged/organized files
 UPLOAD_FOLDER = 'uploads'
 MERGED_FOLDER = 'merged'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

@@ -5,53 +5,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/pdf-merge.css">
     <link rel="stylesheet" href="/static/css/pdf-split.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <title>FormatX | Split PDF</title>
+    <title>FormatX - Split PDF</title>
     <link rel="icon" href="/static/assets/logo.png">
 </head>
 
 <body>
     <header>
         <div class="logo">
-            <span>Format<span class="x-highlight">X</span></span>
+            <a href="./" style="text-decoration: none;"><span>Format<span class="x-highlight">X</span></span></a>
         </div>
         <nav>
             <a href="./">Home</a>
+            <div class="dropdown">
+                <a>Convert</a>
+                <div class="dropdown-menu">
+                    <a href="">PDF to Word</a>
+                    <a href="">Word to PDF</a>
+                    <a href="">PDF to PowerPoint</a>
+                    <a href="">PowerPoint to PDF</a>
+                </div>
+            </div>
             <a href="/pdf-merge">Merge PDF</a>
             <a href="/pdf-organize">Re-Organize PDF</a>
             <a href="/pdf-split" class="active">Split PDF</a>
-            <a href="/pdf-to-docx">Convert PDF</a>
         </nav>
     </header>
     <main>
         <section class="intro">
             <h1>Split One PDF into Many</h1>
             <p>
-                With our PDF Merge tool, combining multiple PDF files into a single document has never been easier.
-                Simply follow these steps:
+                Split a single PDF into multiple smaller PDFs with ease! Simply follow these steps:
             </p>
             <ul>
-                <li><strong>Upload Your Files:</strong> Click the "Upload Files" button to select multiple PDF files
-                    from your device. You can select a maximum of 20 files from your device.</li>
-                <li><strong>Arrange the Files:</strong> Once the files are uploaded, you can easily reorder them by
-                    dragging and dropping. Arrange them in the sequence you want the final document to appear.</li>
-                <li><strong>Preview the Files:</strong> Each file has a little preview of the first page so that you
-                    know you are confidently rearranging the correct file in the correct order.</li>
-                <li><strong>Merge the PDFs:</strong> When you're happy with the order and the previews, simply click the
-                    "Merge PDFs" button to combine all selected files into a single PDF.</li>
-                <li><strong>Download the Final Document:</strong> Once the merge is complete, the final newly merged PDF
-                    will be downloaded onto your device!</li>
+                <li><strong>Upload Your PDF:</strong> Click "Upload File" to select your PDF.</li>
+                <li><strong>Choose Splits:</strong> Select the number of splits you want (up to 3).</li>
+                <li><strong>Organize Pages:</strong> Drag and drop pages into the desired split sections or use page
+                    numbers.</li>
+                <li><strong>Download the Result:</strong> Once satisfied, click "Split PDF" to download your split
+                    files!</li>
             </ul>
-            <p>
-                This tool is perfect for combining contracts, reports, or any collection of PDF documents into one
-                convenient file. Whether you’re managing work documents or personal files, our simple and intuitive
-                interface will help you get the job done in just a few clicks!
-            </p>
         </section>
     </main>
+
+    <div class="file-upload-section">
+        <form id="splitForm" action="/pdf-split" method="POST" enctype="multipart/form-data">
+            <div class="button-container">
+                <label for="file-input" class="custom-file-upload">Upload PDF</label>
+                <button type="button" class="clear-files" onclick="window.location.reload()">Clear</button>
+            </div>
+            <input type="file" id="file-input" name="file" accept="application/pdf">
+            <p id="file-limit-message" style="color: red; display: none;">Please upload a valid PDF.</p>
+
+            <!-- Main PDF Container -->
+            <div id="main-pdf-container" class="file-list" style="display: none;">
+                <h2>Uploaded PDF</h2>
+                <div id="pdf-preview"></div>
+                <center>
+                    <label for="split-count">How many splits? (1–3):</label>
+                    <input type="number" id="split-count" min="1" max="3">
+                    <button type="button" id="generate-splits" class="custom-file-upload">Generate Split Boxes</button>
+                </center>
+            </div>
+
+            <!-- Split Boxes Container -->
+            <div id="split-box-container" class="file-list" style="display: none;">
+                <h2>Split Boxes</h2>
+            </div>
+
+            <center><button type="submit" class="merge-button" disabled>Split PDF</button></center>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="/static/js/pdf-split.js"></script>
 </body>
 
 </html>

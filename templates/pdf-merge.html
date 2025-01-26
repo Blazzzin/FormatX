@@ -9,21 +9,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <title>FormatX | Merge PDF</title>
+    <title>FormatX - Merge PDF</title>
     <link rel="icon" href="/static/assets/logo.png">
 </head>
 
 <body>
     <header>
         <div class="logo">
-            <span>Format<span class="x-highlight">X</span></span>
+            <a href="./" style="text-decoration: none;"><span>Format<span class="x-highlight">X</span></span></a>
         </div>
         <nav>
             <a href="./">Home</a>
+            <div class="dropdown">
+                <a>Convert</a>
+                <div class="dropdown-menu">
+                    <a href="">PDF to Word</a>
+                    <a href="">Word to PDF</a>
+                    <a href="">PDF to PowerPoint</a>
+                    <a href="">PowerPoint to PDF</a>
+                </div>
+            </div>
             <a href="/pdf-merge" class="active">Merge PDF</a>
             <a href="/pdf-organize">Re-Organize PDF</a>
             <a href="/pdf-split">Split PDF</a>
-            <a href="/pdf-to-docx">Convert PDF</a>
         </nav>
     </header>
     <main>
@@ -44,12 +52,7 @@
                     "Merge PDFs" button to combine all selected files into a single PDF.</li>
                 <li><strong>Download the Final Document:</strong> Once the merge is complete, the final newly merged PDF
                     will be downloaded onto your device!</li>
-            </ul>
-            <p>
-                This tool is perfect for combining contracts, reports, or any collection of PDF documents into one
-                convenient file. Whether you’re managing work documents or personal files, our simple and intuitive
-                interface will help you get the job done in just a few clicks!
-            </p>
+            </ul>   
         </section>
     </main>
 

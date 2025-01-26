@@ -84,7 +84,7 @@ nav a.active {
 
 /* Main content section */
 main {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 80px auto;
   padding: 20px;
   background: #ffffff;
@@ -156,4 +156,68 @@ footer p {
   nav a {
     margin: 5px 0;
   }
+}
+
+/* Dropdown container styling */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  /* Remove any padding/margin on the dropdown container */
+}
+
+/* Dropdown toggle link (parent link, e.g., "Convert PDF") */
+.dropdown-toggle {
+  cursor: pointer;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 140%; /* Position below the parent link */
+  left: 15%; /* Align to the left of the parent element */
+  background-color: #34495e; /* Same as the header or nav */
+  min-width: 150px; /* Minimum width for the dropdown */
+  box-sizing: border-box; /* Include padding in the total width calculation */
+  padding: 0; /* Remove any padding */
+  z-index: 1000; /* Ensure it appears above other elements */
+  overflow: hidden;
+  text-align: center;
+  border-style: ridge;
+}
+
+/* Remove any border or padding issues that cause space */
+.dropdown-menu a {
+  display: block;
+  color: #ecf0f1;
+  padding: 10px 15px; /* Proper padding for text */
+  text-decoration: none;
+  font-size: 14px;
+  margin: 0; /* Ensure no margin */
+  border: none; /* Remove any border that could create extra space */
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Makes sure padding doesn’t add extra width */
+}
+
+/* Remove border on the last menu item */
+.dropdown-menu a:last-child {
+  border-bottom: none;
+}
+
+/* Hover effects for dropdown items */
+.dropdown-menu a:hover {
+  background-color: #1abc9c;
+  color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-menu {
+  display: block;
 }
