@@ -92,4 +92,4 @@ Follow this repository for the latest updates. Visual improvements, new features
 
 ---
 
-Made with ❤️ by [Your Name].
+Made with by Saheer Multani.
