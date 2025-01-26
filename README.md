@@ -85,34 +85,9 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 ---
 
-## 💬 Feedback
-
-Your feedback is invaluable! Share your thoughts by opening an issue or contributing to the project.
-
----
-
-## 📜 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
 ### 👀 Stay Updated
 
 Follow this repository for the latest updates. Visual improvements, new features, and optimizations are on the way!
-
----
-
-### 🙌 Contributing
-
-Contributions are welcome! Feel free to fork this repository and submit a pull request with your enhancements.
-
----
-
-### 🔗 Links
-
-- **Live Demo**: [Visit Here](https://your-live-demo-link.com)
-- **Documentation**: [View Docs](https://your-documentation-link.com)
 
 ---
 
