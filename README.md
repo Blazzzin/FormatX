@@ -38,7 +38,8 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 > *The gateway to effortless document management.*
 
 ### Merge Tools
-![Merge Tools Preview](./github_assets/merge_preview_1.png)  
+![Merge Tools Preview 1](./github_assets/merge_preview_1.png)  
+![Merge Tools Preview 2](./github_assets/merge_preview_2.png)
 > *Select the desired transformation and let FormatX handle the rest.*
 
 ---
