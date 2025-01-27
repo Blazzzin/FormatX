@@ -1,7 +1,7 @@
 # FormatX
 ### Your All-in-One File Conversion System
 
-Welcome to **FormatX**! This repository houses the ultimate solution for managing and transforming digital documents and images with ease. From conversions to organization, **FormatX** simplifies your workflow, saving you time and effort.
+Welcome to **FormatX**! This repository houses the ultimate solution for managing and transforming digital documents with ease. From conversions to organization, **FormatX** simplifies your workflow, saving you time and effort.
 
 ---
 
@@ -61,7 +61,7 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 ### 🛠️ Work in Progress
 
-- Split and Covert PDFs
+- Split and Convert PDFs
 - Enhanced file security features.
 - Drag-and-drop upload functionality for ease of use.
 - Expanded support for more file types.
