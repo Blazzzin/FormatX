@@ -46,9 +46,9 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: HTML, CSS (Poppins Font for elegant design).
-- **Backend**: Python/Node.js (placeholder).
-- **Deployment**: Flask/Express.js (placeholder).
+- **Frontend**: HTML, CSS.
+- **Backend**: Python.
+- **Deployment**: Flask.
 
 ---
 
@@ -56,21 +56,22 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 ### ✅ Completed
 
-- Merge, Split, and Organize PDFs.
+- Merge and Organize PDFs.
 - Core File Conversion functionalities.
 - User-friendly web interface.
 
 ### 🛠️ Work in Progress
 
+- Split and Covert PDFs
 - Enhanced file security features.
-- Drag-and-drop functionality for ease of use.
+- Drag-and-drop upload functionality for ease of use.
 - Expanded support for more file types.
 
 ### 🎯 Upcoming Features
 
 - Real-time progress notifications for long-running tasks.
 - Integration with cloud storage solutions (Google Drive, Dropbox).
-- Mobile-friendly design.
+- Mobile-friendly design and possibly an IOS app.
 
 ---
 
