@@ -46,7 +46,7 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: HTML, CSS.
+- **Frontend**: HTML, CSS, JavaScript.
 - **Backend**: Python.
 - **Deployment**: Flask.
 
