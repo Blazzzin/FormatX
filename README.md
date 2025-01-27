@@ -80,7 +80,7 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 2. Navigate to the directory: `cd formatx`
 3. Start the server:
     ```bash
-    python app.py  # If Flask is used
+    python app.py
     ```
 4. Open your browser and visit: `http://localhost:5000`
 
