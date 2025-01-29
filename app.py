@@ -40,7 +40,9 @@ def pdf_merge():
         if saved_files:
             merger = PdfWriter()
             for file_path in saved_files:
-                merger.append(file_path)
+                reader = PdfReader(file_path)  # Open each PDF
+                for page in reader.pages:
+                    merger.add_page(page)
 
             merged_file_path = os.path.join(app.config['MERGED_FOLDER'], 'merged_output.pdf')
             with open(merged_file_path, 'wb') as merged_pdf:
