@@ -34,12 +34,12 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 ## 📸 Preview
 
 ### Home Page
-![Home Page Preview](./github_assets/home_preview.png)  
+<!-- ![Home Page Preview](./github_assets/home_preview.png)   -->
 > *The gateway to effortless document management.*
 
 ### Merge Tools
-![Merge Tools Preview 1](./github_assets/merge_preview_1.png)  
-![Merge Tools Preview 2](./github_assets/merge_preview_2.png)
+<!-- ![Merge Tools Preview 1](./github_assets/merge_preview_1.png)   -->
+<!-- ![Merge Tools Preview 2](./github_assets/merge_preview_2.png) -->
 > *Select the desired transformation and let FormatX handle the rest.*
 
 ---
