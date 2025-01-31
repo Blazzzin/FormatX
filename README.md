@@ -76,7 +76,7 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 ## 📝 How to Use
 
-1. Clone this repository: `git clone https://github.com/your-username/formatx.git`
+1. Clone this repository: `git clone https://github.com/Blazzzin/formatx.git`
 2. Navigate to the directory: `cd formatx`
 3. Start the server:
     ```bash
