@@ -74,6 +74,7 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 - Real-time progress notifications for long-running tasks.
 - Integration with cloud storage solutions (Google Drive, Dropbox).
 - Mobile-friendly design and possibly an IOS app.
+- Containerization with Docker and deployment on AWS for scalable and efficient hosting.
 
 ---
 
