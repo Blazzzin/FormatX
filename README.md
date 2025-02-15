@@ -40,8 +40,11 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 ### Merge Tools
 ![Merge Tools Preview 1](./github_assets/merge_preview_1.png)  
 ![Merge Tools Preview 2](./github_assets/merge_preview_2.png)
-> *Select the desired transformation and let FormatX handle the rest.*
 
+### Split Tools
+![Split Tools Preview 1](./github_assets/split_preview_1.png)  
+![Split Tools Preview 2](./github_assets/split_preview_2.png)
+> *Select the desired transformation and let FormatX handle the rest.*
 ---
 
 ## 🛠️ Tech Stack
