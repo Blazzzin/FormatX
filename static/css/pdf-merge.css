@@ -1,4 +1,3 @@
-/* File upload section styling */
 .file-upload-section {
     margin: 20px;
     padding: 20px;
@@ -8,7 +7,6 @@
     margin-top: -30px;
 }
 
-/* File list container styling */
 .file-list {
     margin-top: 20px;
     padding: 10px;
@@ -23,7 +21,6 @@
     justify-content: center;
 }
 
-/* File item styling */
 .file-item {
     padding: 8px;
     margin: 5px;
@@ -42,12 +39,10 @@
     transition: transform 0.2s ease;
 }
 
-/* Hover effect for file items */
 .file-item:hover {
     transform: scale(1.05);
 }
 
-/* Remove button (X) styling */
 .file-item .remove-file {
     position: absolute;
     top: 5px;
@@ -67,18 +62,15 @@
     transition: background-color 0.3s ease;
 }
 
-/* Remove button hover effect */
 .file-item .remove-file:hover {
     background-color: #c0392b;
 }
 
-/* PDF preview container styling */
 .pdf-preview-container {
     margin-top: 10px;
     text-align: center;
 }
 
-/* Canvas for PDF rendering */
 .pdf-preview-container canvas {
     max-width: 100%;
     height: auto;
@@ -87,12 +79,10 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Hide the default file input */
 #file-input {
     display: none;
 }
 
-/* Custom button styling */
 .custom-file-upload,
 .merge-button,
 .clear-files {
@@ -111,7 +101,6 @@
     box-sizing: border-box;
 }
 
-/* Container for buttons */
 .button-container {
     display: flex;
     gap: 20px;
@@ -119,7 +108,6 @@
     justify-content: center;
 }
 
-/* Hover effect for buttons */
 .custom-file-upload:hover,
 .merge-button:hover,
 .clear-files:hover {
