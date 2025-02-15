@@ -68,12 +68,12 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 - Enhanced file security features.
 - Drag-and-drop upload functionality for ease of use.
 - Expanded support for more file types.
+- iOS app with the help of [@jawlessjman](https://github.com/jawlessjman).
 
 ### 🎯 Upcoming Features
 
 - Real-time progress notifications for long-running tasks.
 - Integration with cloud storage solutions (Google Drive, Dropbox).
-- Mobile-friendly design and possibly an IOS app.
 - Containerization with Docker and deployment on AWS for scalable and efficient hosting.
 
 ---
