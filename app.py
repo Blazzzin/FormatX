@@ -113,6 +113,75 @@ def pdf_organize():
 
 @app.route('/pdf-split', methods=['GET', 'POST'])
 def pdf_split():
+    if request.method == 'POST':
+        if 'file' not in request.files or not request.files['file']:
+            return jsonify({"error": "No file uploaded"}), 400
+
+        file = request.files['file']
+        if not file.filename.endswith('.pdf'):
+            return jsonify({"error": "Uploaded file is not a valid PDF"}), 400
+
+        # Save the uploaded PDF
+        uploaded_file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(uploaded_file_path)
+
+        # Get the page ranges from the client
+        try:
+            ranges_text = request.form.get('ranges')
+            if not ranges_text:
+                return jsonify({"error": "Page ranges not provided"}), 400
+
+            # Parse the page ranges (e.g., "1-3, 4-6, 7-10")
+            ranges = []
+            for range_str in ranges_text.split(','):
+                range_str = range_str.strip()
+                if '-' in range_str:
+                    start, end = map(int, range_str.split('-'))
+                    ranges.append((start, end))
+                else:
+                    page = int(range_str)
+                    ranges.append((page, page))
+
+            # Create a list to store the paths of split files
+            split_files = []
+            reader = PdfReader(uploaded_file_path)
+
+            # Validate page ranges
+            total_pages = len(reader.pages)
+            for start, end in ranges:
+                if start < 1 or end > total_pages or start > end:
+                    return jsonify({"error": f"Invalid page range: {start}-{end}"}), 400
+
+            # Split the PDF according to the ranges
+            for i, (start, end) in enumerate(ranges):
+                writer = PdfWriter()
+                
+                # Add pages for this range (converting to 0-based index)
+                for page_num in range(start - 1, end):
+                    writer.add_page(reader.pages[page_num])
+
+                # Save this split
+                split_filename = f'split_{i + 1}.pdf'
+                split_path = os.path.join(app.config['MERGED_FOLDER'], split_filename)
+                with open(split_path, 'wb') as split_pdf:
+                    writer.write(split_pdf)
+                
+                split_files.append(f'/download/{split_filename}')
+
+            # Clean up the uploaded file
+            os.remove(uploaded_file_path)
+
+            # Return the URLs for all split files
+            return jsonify({
+                "message": "PDF split successfully",
+                "split_files": split_files
+            })
+
+        except ValueError as e:
+            return jsonify({"error": f"Invalid page range format: {str(e)}"}), 400
+        except Exception as e:
+            return jsonify({"error": f"Failed to split PDF: {str(e)}"}), 500
+
     return render_template('pdf-split.html')
 
 @app.route('/download/<filename>')
