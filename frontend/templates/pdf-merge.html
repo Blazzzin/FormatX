@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="../static/css/pdf-merge.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>FormatX - Merge PDF</title>
+    <link rel="icon" href="../static/assets/logo.png">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="./" style="text-decoration: none;"><span>Format<span class="x-highlight">X</span></span></a>
+        </div>
+        <nav>
+            <div class="nav-main">
+                <a href="./">Home</a>
+                <a href="pdf-merge.html" class="active">Merge PDF</a>
+                <a href="pdf-organize.html">Re-Organize PDF</a>
+                <a href="pdf-split.html">Split PDF</a>
+                <div class="dropdown">
+                    <a>Convert</a>
+                    <div class="dropdown-menu">
+                        <a href="">PDF to Word</a>
+                        <a href="">Word to PDF</a>
+                        <a href="">PDF to PowerPoint</a>
+                        <a href="">PowerPoint to PDF</a>
+                        <a href="">PDF to Image</a>
+                        <a href="">Image to PDF</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a>More Tools</a>
+                    <div class="dropdown-menu">
+                        <a href="">Compress PDF</a>
+                        <a href="">Edit PDF</a>
+                        <a href="">PDF to Text</a>
+                        <a href="">Add Watermark</a>
+                    </div>
+                </div>
+            </div>
+            <div class="user-controls">
+                <a href="/login" class="login-btn">Login</a>
+                <a href="/signup" class="signup-btn">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="intro">
+            <h1>Merge Multiple PDFs Into One</h1>
+            <p>
+                With our PDF Merge tool, combining multiple PDF files into a single document has never been easier.
+                Simply follow these steps:
+            </p>
+            <ul>
+                <li><strong>Upload Your Files:</strong> Click the "Upload Files" button to select multiple PDF files
+                    from your device. You can select a maximum of 20 files from your device.</li>
+                <li><strong>Arrange the Files:</strong> Once the files are uploaded, you can easily reorder them by
+                    dragging and dropping. Arrange them in the sequence you want the final document to appear.</li>
+                <li><strong>Preview the Files:</strong> Each file has a little preview of the first page so that you
+                    know you are confidently rearranging the correct file in the correct order.</li>
+                <li><strong>Merge the PDFs:</strong> When you're happy with the order and the previews, simply click the
+                    "Merge PDFs" button to combine all selected files into a single PDF.</li>
+                <li><strong>Download the Final Document:</strong> Once the merge is complete, the final newly merged PDF
+                    will be downloaded onto your device!</li>
+            </ul>
+        </section>
+    </main>
+
+    <div class="file-upload-section">
+        <form id="mergeForm" action="/pdf-merge" method="POST" enctype="multipart/form-data">
+            <div class="button-container">
+                <label for="file-input" class="custom-file-upload">Upload Files</label>
+                <button type="button" class="clear-files" onclick="window.location.reload()">Reset</button>
+            </div>
+            <input type="file" id="file-input" name="files[]" accept="application/pdf" multiple>
+            <p id="file-limit-message" style="color: red; display: none;">Maximum of 20 files allowed*</p>
+            <center>
+                <div id="file-list" class="file-list">
+                    <p id="default-text" class="default-text-class">No files uploaded yet. Use the upload button above.
+                    </p>
+                </div>
+            </center>
+            <center><button type="submit" class="merge-button" disabled>Merge PDFs</button></center>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="../static/js/pdf-merge.js"></script>
+</body>
+
+</html>
