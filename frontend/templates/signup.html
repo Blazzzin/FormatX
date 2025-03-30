@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="../static/css/auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Sign Up - FormatX</title>
+    <link rel="icon" href="../static/assets/logo.png">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="./" style="text-decoration: none;"><span>Format<span class="x-highlight">X</span></span></a>
+        </div>
+        <nav>
+            <div class="nav-main">
+                <a href="./">Home</a>
+                <a href="pdf-merge.html">Merge PDF</a>
+                <a href="pdf-organize.html">Re-Organize PDF</a>
+                <a href="pdf-split.html">Split PDF</a>
+                <div class="dropdown">
+                    <a>Convert</a>
+                    <div class="dropdown-menu">
+                        <a href="">PDF to Word</a>
+                        <a href="">Word to PDF</a>
+                        <a href="">PDF to PowerPoint</a>
+                        <a href="">PowerPoint to PDF</a>
+                        <a href="">PDF to Image</a>
+                        <a href="">Image to PDF</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a>More Tools</a>
+                    <div class="dropdown-menu">
+                        <a href="">Compress PDF</a>
+                        <a href="">Edit PDF</a>
+                        <a href="">PDF to Text</a>
+                        <a href="">Add Watermark</a>
+                    </div>
+                </div>
+            </div>
+            <div class="user-controls">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn active">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            <div class="auth-form">
+                <h1>Create an Account</h1>
+                <div id="error-message" class="error-message"></div>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+                    <button type="submit" class="auth-button">Sign Up</button>
+                </form>
+                <p class="auth-redirect">Already have an account? <a href="login.html">Login</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script src="../static/js/auth.js"></script>
+</body>
+
+</html>
