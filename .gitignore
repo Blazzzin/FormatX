@@ -3,3 +3,4 @@ converters/
 merged/
 uploads/
 services/user-service/.env
+services/user-service/__pycache__
