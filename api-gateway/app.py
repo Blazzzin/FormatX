@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app)
 
 USER_SERVICE_URL = "http://localhost:5001/api/user"
 FILE_SERVICE_URL = "http://localhost:5002/api/files"

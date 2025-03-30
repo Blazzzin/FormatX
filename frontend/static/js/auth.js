@@ -1,5 +1,5 @@
 // API endpoint configuration
-const API_BASE_URL = 'http://localhost:5001/api/user';
+const API_BASE_URL = 'http://localhost:5000/api/user';
 
 // DOM Elements
 const errorMessageElement = document.getElementById('error-message');
