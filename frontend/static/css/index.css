@@ -1,19 +1,84 @@
+:root {
+  --primary: #2c3e50;
+  --primary-light: #34495e;
+  --accent: #1abc9c;
+  --accent-hover: #16a085;
+  --danger: #e74c3c;
+  --danger-hover: #c0392b;
+  --text-light: #ecf0f1;
+  --text-dark: #333;
+  --text-medium: #555;
+  --bg-light: #f5f5f5;
+  --bg-white: #ffffff;
+  --border-color: #ddd;
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--primary);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+p {
+  color: var(--text-medium);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  color: var(--text-dark);
+}
+
+li {
+  margin-bottom: 10px;
 }
 
 header {
-  background-color: #2c3e50;
-  color: #ecf0f1;
+  background-color: var(--primary);
+  color: var(--text-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   position: fixed;
   top: 0;
   width: 100%;
@@ -35,14 +100,14 @@ header {
 .logo span {
   font-size: 28px;
   font-weight: 700;
-  color: #1abc9c;
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .x-highlight {
-  background: linear-gradient(45deg, #1abc9c, #e74c3c);
+  background: linear-gradient(45deg, var(--accent), var(--danger));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: 1.5em;
@@ -68,20 +133,21 @@ nav {
 
 nav a {
   text-decoration: none;
-  color: #ecf0f1;
+  color: var(--text-light);
   margin-left: 15px;
   font-size: 14px;
   padding: 10px 12px;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   border-radius: 5px;
+  position: relative;
 }
 
 nav a:hover,
 nav a.active {
-  background-color: #1abc9c;
+  background-color: var(--accent);
   color: #fff;
   font-weight: 600;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .user-controls {
@@ -90,60 +156,70 @@ nav a.active {
   margin-left: auto;
 }
 
+.login-btn,
+.signup-btn {
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: var(--transition);
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .login-btn {
   background-color: transparent;
-  border: 1px solid #1abc9c;
-  color: #1abc9c;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.login-btn:hover,
+.login-btn.active {
+  background-color: var(--accent);
+  color: #fff;
 }
 
 .signup-btn {
-  background-color: #1abc9c;
+  background-color: var(--accent);
   color: #fff;
   margin-left: 10px;
+}
+
+.signup-btn:hover,
+.signup-btn.active {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 main {
   max-width: 1400px;
   margin: 80px auto;
-  padding: 20px;
-  background: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  padding: 30px;
+  background: var(--bg-white);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius);
 }
 
-h1,
-h2 {
-  color: #2c3e50;
-  margin-bottom: 10px;
-}
-
-h1 {
-  text-align: center;
-}
-
-p {
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-ul {
-  list-style-type: disc;
-  padding-left: 20px;
-  color: #333;
-}
-
-li {
-  margin-bottom: 10px;
+section {
+  margin-bottom: 40px;
 }
 
 .cta {
   margin-top: 40px;
+  text-align: center;
+  background-color: var(--primary-light);
+  padding: 30px;
+  border-radius: var(--radius);
+  color: var(--text-light);
 }
 
 .cta h2 {
   text-align: center;
-  color: #1abc9c;
+  color: var(--accent);
+}
+
+.cta p {
+  color: var(--text-light);
 }
 
 footer {
@@ -154,8 +230,17 @@ footer {
   font-size: 14px;
 }
 
+footer {
+  text-align: center;
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--primary);
+  font-size: 14px;
+}
+
 footer p {
-  color: #ffffff;
+  color: var(--text-light);
+  margin: 0;
 }
 
 .dropdown {
@@ -163,6 +248,13 @@ footer p {
   display: inline-block;
   margin: 0;
   padding: 0;
+}
+
+.dropdown>a::after {
+  content: '\203A';
+  font-size: 15px;
+  margin-left: 5px;
+  transition: transform 0.3s ease;
 }
 
 .dropdown-toggle {
@@ -176,28 +268,41 @@ footer p {
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 140%;
+  top: 130%;
   left: 0;
-  background-color: #34495e;
+  background-color: var(--primary-light);
   min-width: 180px;
   box-sizing: border-box;
-  padding: 0;
+  padding: 5px 0;
   z-index: 1000;
   overflow: hidden;
   text-align: center;
   border-radius: 5px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dropdown-menu a {
   display: block;
-  color: #ecf0f1;
+  color: var(--text-light);
   padding: 10px 15px;
   text-decoration: none;
   font-size: 14px;
   margin: 0;
   border: none;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   box-sizing: border-box;
   text-align: left;
 }
@@ -207,9 +312,9 @@ footer p {
 }
 
 .dropdown-menu a:hover {
-  background-color: #1abc9c;
+  background-color: var(--accent);
   color: #fff;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .dropdown:hover .dropdown-menu {
@@ -263,5 +368,17 @@ footer p {
   nav a {
     font-size: 12px;
     padding: 8px 10px;
+  }
+
+  main {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
   }
 }
