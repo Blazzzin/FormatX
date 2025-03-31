@@ -52,26 +52,28 @@
         </nav>
     </header>
 
-    <main>
-        <div class="auth-container">
-            <div class="auth-form">
-                <h1>Login</h1>
-                <div id="error-message" class="error-message"></div>
-                <form id="login-form">
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="auth-button">Login</button>
-                </form>
-                <p class="auth-redirect">Don't have an account? <a href="signup.html">Sign Up</a></p>
-            </div>
+    <div class="auth-container">
+        <div class="auth-form">
+            <h1>Login</h1>
+            <div id="error-message" class="error-message"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="auth-button">Login</button>
+            </form>
+            <p class="auth-redirect">Don't have an account? <a href="signup.html">Sign Up</a></p>
         </div>
-    </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FormatX. All Rights Reserved.</p>
+    </footer>
 
     <script src="../static/js/auth.js"></script>
 </body>
