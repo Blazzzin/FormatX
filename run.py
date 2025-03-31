@@ -10,16 +10,13 @@ def run_api_gateway():
     subprocess.Popen(["python", "api-gateway/app.py"])
 
 def run_frontend():
-    # Change to the 'frontend' directory where both 'templates' and 'static' are located
     frontend_dir = os.path.join(os.getcwd(), "frontend")
     os.chdir(frontend_dir)
     
-    # Start the simple HTTP server
     subprocess.Popen(["python", "-m", "http.server", "8000"])
     
     time.sleep(2)
     
-    # Open the index.html in the browser
     webbrowser.open("http://localhost:8000/templates/index.html")
 
 if __name__ == "__main__":
