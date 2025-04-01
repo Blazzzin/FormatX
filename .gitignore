@@ -4,3 +4,5 @@ merged/
 uploads/
 services/user-service/.env
 services/user-service/__pycache__
+services/file-service/.env
+services/file-service/__pycache__
