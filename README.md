@@ -41,7 +41,6 @@ The new microservices setup means each feature is powered by dedicated services 
 
 ### Home Page  
 ![Home Page Preview](./github_assets/home_preview.png)  
-*Your gateway to effortless document management.*
 
 ### Merge Tools  
 ![Merge Tools Preview 1](./github_assets/merge_preview_1.png)  
