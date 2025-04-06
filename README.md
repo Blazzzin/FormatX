@@ -54,7 +54,6 @@ The new microservices setup means each feature is powered by dedicated services 
 ### Split Tools  
 ![Split Tools Preview 1](./github_assets/split_preview_1.png)  
 ![Split Tools Preview 2](./github_assets/split_preview_2.png)  
-*Select the desired transformation and let FormatX handle the rest.*
 
 ---
 
