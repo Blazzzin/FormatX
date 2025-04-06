@@ -1,4 +1,10 @@
 .vscode/
 converters/
-merged/
+merged_pdfs/
 uploads/
+services/user-service/.env
+services/user-service/__pycache__
+services/file-service/.env
+services/file-service/__pycache__
+frontend/templates/profile.html
+frontend/static/js/profile.js

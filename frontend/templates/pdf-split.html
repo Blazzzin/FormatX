@@ -4,35 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/index.css">
-    <link rel="stylesheet" href="/static/css/pdf-split.css">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="../static/css/pdf-split.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <title>FormatX - Split PDF</title>
-    <link rel="icon" href="/static/assets/logo.png">
+    <link rel="icon" href="../static/assets/logo.png">
 </head>
 
 <body>
     <header>
         <div class="logo">
             <a href="./" style="text-decoration: none;"><span>Format<span class="x-highlight">X</span></span></a>
-            <span style="color: red; margin-left: 20px; font-size: 12px;">Under Construction</span>
         </div>
         <nav>
-            <a href="./">Home</a>
-            <div class="dropdown">
-                <a>Convert</a>
-                <div class="dropdown-menu">
-                    <a href="">PDF to Word</a>
-                    <a href="">Word to PDF</a>
-                    <a href="">PDF to PowerPoint</a>
-                    <a href="">PowerPoint to PDF</a>
+            <div class="nav-main">
+                <a href="./">Home</a>
+                <a href="/pdf-merge">Merge PDF</a>
+                <a href="/pdf-organize">Re-Organize PDF</a>
+                <a href="/pdf-split" class="active">Split PDF</a>
+                <div class="dropdown">
+                    <a>Convert</a>
+                    <div class="dropdown-menu">
+                        <a href="">PDF to Word</a>
+                        <a href="">Word to PDF</a>
+                        <a href="">PDF to PowerPoint</a>
+                        <a href="">PowerPoint to PDF</a>
+                        <a href="">PDF to Image</a>
+                        <a href="">Image to PDF</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a>More Tools</a>
+                    <div class="dropdown-menu">
+                        <a href="">Compress PDF</a>
+                        <a href="">Edit PDF</a>
+                        <a href="">PDF to Text</a>
+                        <a href="">Add Watermark</a>
+                    </div>
                 </div>
             </div>
-            <a href="/pdf-merge">Merge PDF</a>
-            <a href="/pdf-organize">Re-Organize PDF</a>
-            <a href="/pdf-split" class="active">Split PDF</a>
+            <div class="user-controls">
+                <a href="/login" class="login-btn">Login</a>
+                <a href="/signup" class="signup-btn">Sign Up</a>
+            </div>
         </nav>
     </header>
     <main>
@@ -75,7 +91,7 @@
                                     placeholder="e.g., 1-3, 4-6, 7-10">
                             </div>
                             <div class="range-examples">
-                                Examples:
+                                <span class="example-tag">Examples:</span>
                                 <span class="example">1-5</span>
                                 <span class="example">1-3, 4-6</span>
                                 <span class="example">1, 3, 5-7</span>
@@ -89,8 +105,13 @@
         </form>
     </div>
 
+    <footer>
+        <p>&copy; 2025 FormatX. All Rights Reserved.</p>
+    </footer>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-    <script src="/static/js/pdf-split.js"></script>
+    <script src="../static/js/pdf-split.js"></script>
+    <script src="../static/js/auth.js"></script>
 </body>
 
 </html>

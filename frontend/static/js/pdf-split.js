@@ -107,6 +107,8 @@ function validatePageRanges(event) {
     }
 }
 
+const API_BASE_URL_SPLIT = 'http://localhost:5000/api/files';
+
 document.getElementById('splitForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -114,19 +116,28 @@ document.getElementById('splitForm').addEventListener('submit', function (event)
     formData.append('file', fileInput.files[0]);
     formData.append('ranges', pageRangesInput.value);
 
-    fetch('/pdf-split', {
+    const jwtToken = localStorage.getItem('token');
+
+    const headers = jwtToken ? {
+        'Authorization': `Bearer ${jwtToken}`
+    } : {};
+
+    fetch(`${API_BASE_URL_SPLIT}/split`, {
         method: 'POST',
+        headers: headers,
         body: formData
     })
         .then(response => response.json())
         .then(data => {
             if (data.split_files) {
-                // Download each split file
                 data.split_files.forEach((fileUrl, index) => {
                     const downloadLink = document.createElement('a');
-                    downloadLink.href = fileUrl;
+                    downloadLink.href = `${API_BASE_URL_SPLIT}${fileUrl}`;
                     downloadLink.download = `split_${index + 1}.pdf`;
+                    downloadLink.target = '_blank';
+                    document.body.appendChild(downloadLink);
                     downloadLink.click();
+                    document.body.removeChild(downloadLink);
                 });
                 alert('PDF split successfully!');
             } else if (data.error) {

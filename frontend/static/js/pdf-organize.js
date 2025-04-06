@@ -8,8 +8,8 @@ let pagesList = [];
 fileInput.addEventListener('change', handleFileSelect);
 
 function handleFileSelect(event) {
-    pageListContainer.innerHTML = '';  // Clear the existing previews or page items
-    pagesList = [];  // Clear the pages list array
+    pageListContainer.innerHTML = '';
+    pagesList = [];
 
     const file = event.target.files[0];
     if (!file) return;
@@ -87,24 +87,36 @@ function enableDragAndDrop() {
     });
 }
 
+const API_BASE_URL_ORG = 'http://localhost:5000/api/files';
+
 document.getElementById('organizeForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('file', fileInput.files[0]); // Add the file
+    formData.append('file', fileInput.files[0]);
     formData.append('pages', JSON.stringify(pagesList));
 
-    fetch('/pdf-organize', {
+    const jwtToken = localStorage.getItem('token');
+
+    const headers = jwtToken ? {
+        'Authorization': `Bearer ${jwtToken}`
+    } : {};
+
+    fetch(`${API_BASE_URL_ORG}/organize`, {
         method: 'POST',
+        headers: headers,
         body: formData
     })
         .then(response => response.json())
         .then(data => {
             if (data.organized_file_url) {
                 const downloadLink = document.createElement('a');
-                downloadLink.href = data.organized_file_url;
+                downloadLink.href = `${API_BASE_URL_ORG}${data.organized_file_url}`;
                 downloadLink.download = 'organized_output.pdf';
+                downloadLink.target = '_blank';
+                document.body.appendChild(downloadLink);
                 downloadLink.click();
+                document.body.removeChild(downloadLink);
                 alert('PDF reorganized successfully!');
             } else if (data.error) {
                 alert(data.error);

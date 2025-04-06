@@ -1,0 +1,384 @@
+:root {
+  --primary: #2c3e50;
+  --primary-light: #34495e;
+  --accent: #1abc9c;
+  --accent-hover: #16a085;
+  --danger: #e74c3c;
+  --danger-hover: #c0392b;
+  --text-light: #ecf0f1;
+  --text-dark: #333;
+  --text-medium: #555;
+  --bg-light: #f5f5f5;
+  --bg-white: #ffffff;
+  --border-color: #ddd;
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--primary);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+p {
+  color: var(--text-medium);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  color: var(--text-dark);
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+header {
+  background-color: var(--primary);
+  color: var(--text-light);
+  padding: 10px 20px;
+  box-shadow: var(--shadow-md);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo span {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.x-highlight {
+  background: linear-gradient(45deg, var(--accent), var(--danger));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  display: inline-block;
+  transform: scale(1.5);
+  margin-left: 2px;
+}
+
+.nav-main {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text-light);
+  font-size: 14px;
+  padding: 10px 12px;
+  transition: var(--transition);
+  border-radius: 5px;
+  position: relative;
+  font-weight: 600;
+  transform: scale(1);
+}
+
+nav a:hover,
+nav a.active {
+  background-color: var(--accent);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  transform: scale(1.05);
+}
+
+.user-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.user-controls.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.login-btn,
+.signup-btn {
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: var(--transition);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.login-btn {
+  background-color: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.login-btn:hover,
+.login-btn.active {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.signup-btn {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.signup-btn:hover,
+.signup-btn.active {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown>a {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: var(--text-light);
+}
+
+.dropdown>a::after {
+  content: '▼';
+  font-size: 0.6rem;
+  margin-left: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.dropdown:hover>a::after {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--primary-light);
+  min-width: 200px;
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius);
+  padding: 0.75rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.5rem 1.5rem;
+  color: var(--text-light);
+  transition: var(--transition);
+  text-decoration: none;
+  margin: 0;
+  border: none;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--accent);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+main {
+  max-width: 1400px;
+  margin: 150px auto;
+  padding: 30px;
+  background: var(--bg-white);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius);
+}
+
+section {
+  margin-bottom: 40px;
+}
+
+.cta {
+  margin-top: 40px;
+  text-align: center;
+  background-color: var(--primary-light);
+  padding: 30px;
+  border-radius: var(--radius);
+  color: var(--text-light);
+}
+
+.cta h2 {
+  text-align: center;
+  color: var(--accent);
+}
+
+.cta p {
+  color: var(--text-light);
+}
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--primary);
+  font-size: 14px;
+}
+
+footer p {
+  color: var(--text-light);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-main {
+    margin: 1rem 0;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .nav-main a,
+  .dropdown {
+    width: 100%;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    display: none;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu a {
+    padding-left: 1rem;
+  }
+
+  .user-controls {
+    width: 100%;
+    margin-top: 1rem;
+    justify-content: space-between;
+  }
+
+  .login-btn,
+  .signup-btn {
+    width: 48%;
+    text-align: center;
+  }
+
+  main {
+    margin-top: 160px;
+  }
+}
+
+@media (max-width: 500px) {
+  .logo span {
+    font-size: 22px;
+  }
+
+  nav a {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  main {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
