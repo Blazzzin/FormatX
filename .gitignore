@@ -1,6 +1,6 @@
 .vscode/
 converters/
-merged/
+merged_pdfs/
 uploads/
 services/user-service/.env
 services/user-service/__pycache__
