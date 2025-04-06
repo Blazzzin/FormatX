@@ -1,7 +1,17 @@
-# FormatX
+# FormatX  
 ### Your All-in-One File Conversion System
 
-Welcome to **FormatX**! This repository houses the ultimate solution for managing and transforming digital documents with ease. From conversions to organization, **FormatX** simplifies your workflow, saving you time and effort.
+Welcome to **FormatX**! This repository is your ultimate solution for managing and transforming digital documents effortlessly. I have moved to a modern microservices architecture while keeping all the powerful features.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** HTML, CSS, JavaScript.
+- **Backend:** Python with Flask.
+- **Database:** MongoDB.
+- **Architecture:** Microservices (API Gateway, File Service, User Service, etc.).
+- **Deployment:** Flask-based microservices.
 
 ---
 
@@ -10,91 +20,69 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 ### 🌟 Core Functionalities
 
 - **Merge PDFs**  
-  Combine multiple PDF files into a single, streamlined document in just a few clicks.
+  Combine multiple PDF files into one streamlined document with just a few clicks.
 
 - **Organize PDFs**  
   Rearrange, rotate, or delete pages to create the perfect PDF.
 
 - **Split PDFs**  
-  Extract specific pages or divide large PDF files into smaller, manageable parts.
+  Extract specific pages or break up large PDFs into smaller, manageable parts.
 
-- **File Conversion**
+- **File Conversion**  
   - Convert PDFs to editable Word documents.
   - Transform Word files into high-quality PDFs.
-  - Convert PDFs to PowerPoint and vice versa.
+  - Convert PDFs to PowerPoint (and vice versa).
 
-### 🔒 Why Choose FormatX?
-
-- **User-Friendly Interface**: Intuitive navigation makes document management stress-free.
-- **Lightning-Fast Processing**: Handle even large files in seconds.
-- **Secure and Reliable**: Your files are processed with the utmost care and privacy.
+The new microservices setup means each feature is powered by dedicated services like the API gateway, file service, and user service—making the system more robust, scalable, and easier to maintain.
 
 ---
 
 ## 📸 Preview
 
-### Home Page
+### Home Page  
 ![Home Page Preview](./github_assets/home_preview.png)  
-> *The gateway to effortless document management.*
+*Your gateway to effortless document management.*
 
-### Merge Tools
+### Merge Tools  
 ![Merge Tools Preview 1](./github_assets/merge_preview_1.png)  
 ![Merge Tools Preview 2](./github_assets/merge_preview_2.png)
 
-### Split Tools
+### Organize Tools  
+![Organize Tools Preview 1](./github_assets/organize_preview_1.png)  
+![Organize Tools Preview 2](./github_assets/organize_preview_2.png)
+
+### Split Tools  
 ![Split Tools Preview 1](./github_assets/split_preview_1.png)  
-![Split Tools Preview 2](./github_assets/split_preview_2.png)
-> *Select the desired transformation and let FormatX handle the rest.*
----
+![Split Tools Preview 2](./github_assets/split_preview_2.png)  
+*Select the desired transformation and let FormatX handle the rest.*
 
-## 🛠️ Tech Stack
-
-- **Frontend**: HTML, CSS, JavaScript.
-- **Backend**: Python.
-- **Database**: MongoDB.
-- **Deployment**: Flask.
 ---
 
 ## 📈 Roadmap
 
 ### ✅ Completed
 
-- Merge and Organize PDFs.
-- Core File Conversion functionalities.
-- User-friendly web interface.
+- Merge, Organize, and Split PDFs.
+- Login/Sign Up functionality.
+- User Authentication with JWT.
+- Core File Conversion features.
+- A user-friendly web interface.
+- Transition from a monolithic to a microservices architecture.
 
 ### 🛠️ Work in Progress
 
-- Split and Convert PDFs
-- Enhanced file security features.
-- Drag-and-drop upload functionality for ease of use.
-- Expanded support for more file types.
-- iOS app with the help of [@jawlessjman](https://github.com/jawlessjman).
+- Implenting conversion features.
+- Improved file security measures.
+- Implementing drag-and-drop upload functionality.
+- Expanding support for additional file types.
+- Developing an iOS app with help from [@jawlessjman](https://github.com/jawlessjman).
 
 ### 🎯 Upcoming Features
 
 - Real-time progress notifications for long-running tasks.
-- Integration with cloud storage solutions (Google Drive, Dropbox).
-- Containerization with Docker and deployment on AWS for scalable and efficient hosting.
+- Integration with cloud storage solutions (Amazon S3).
+- Containerization with Docker and scalable deployment on Google Cloud or AWS.
 
 ---
-
-<!-- ## 📝 How to Use
-
-1. Clone this repository: `git clone https://github.com/Blazzzin/formatx.git`
-2. Navigate to the directory: `cd formatx`
-3. Start the server:
-    ```bash
-    python app.py
-    ```
-4. Open your browser and visit: `http://localhost:5000`
-
----
-
-### 👀 Stay Updated
-
-Follow this repository for the latest updates. Visual improvements, new features, and optimizations are on the way!
-
---- -->
 
 Made by Saheer Multani.
