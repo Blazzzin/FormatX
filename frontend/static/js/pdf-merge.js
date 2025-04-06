@@ -32,13 +32,11 @@ function handleFileSelect(event) {
             fileItem.classList.add('file-item');
             fileItem.textContent = file.name;
 
-            // Add "X" button to remove the file
             const removeButton = document.createElement('button');
             removeButton.classList.add('remove-file');
             removeButton.textContent = 'X';
             removeButton.title = 'Remove this file';
 
-            // Remove the file when the "X" button is clicked
             removeButton.addEventListener('click', () => {
                 filesList = filesList.filter(f => f.name !== file.name);
                 fileItem.remove();
@@ -98,23 +96,38 @@ function enableDragAndDrop() {
     });
 }
 
+const API_BASE_URL_MERGE = 'http://localhost:5000/api/files';
+
 document.getElementById('mergeForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
     const formData = new FormData();
     filesList.forEach(file => formData.append('files[]', file));
 
-    fetch('/pdf-merge', {
+    const jwtToken = localStorage.getItem('token');
+
+    const headers = jwtToken ? {
+        'Authorization': `Bearer ${jwtToken}`
+    } : {};
+
+    fetch(`${API_BASE_URL_MERGE}/merge`, {
         method: 'POST',
+        headers: headers,
         body: formData
     })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
         .then(data => {
             if (data.merged_file_url) {
                 const downloadLink = document.createElement('a');
-                downloadLink.href = data.merged_file_url;
+                downloadLink.href = `${API_BASE_URL_MERGE}${data.merged_file_url}`;
                 downloadLink.download = 'merged_output.pdf';
+                downloadLink.target = '_blank';
+                document.body.appendChild(downloadLink);
                 downloadLink.click();
+                document.body.removeChild(downloadLink);
                 alert('PDFs merged successfully!');
             } else if (data.error) {
                 alert(data.error);
