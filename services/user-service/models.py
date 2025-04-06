@@ -2,11 +2,9 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from bson import ObjectId
 
-# Helper function to convert MongoDB ObjectId to string
 def object_id_str(obj_id):
     return str(obj_id) if isinstance(obj_id, ObjectId) else obj_id
 
-# User model for validation
 class User(BaseModel):
     id: Optional[str] = None
     email: EmailStr
