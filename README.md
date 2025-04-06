@@ -51,6 +51,7 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 - **Frontend**: HTML, CSS, JavaScript.
 - **Backend**: Python.
+- **Database**: MongoDB.
 - **Deployment**: Flask.
 ---
 
@@ -78,7 +79,7 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 ---
 
-## 📝 How to Use
+<!-- ## 📝 How to Use
 
 1. Clone this repository: `git clone https://github.com/Blazzzin/formatx.git`
 2. Navigate to the directory: `cd formatx`
@@ -94,6 +95,6 @@ Welcome to **FormatX**! This repository houses the ultimate solution for managin
 
 Follow this repository for the latest updates. Visual improvements, new features, and optimizations are on the way!
 
----
+--- -->
 
 Made by Saheer Multani.
