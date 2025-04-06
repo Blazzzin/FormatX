@@ -71,7 +71,6 @@ li {
   margin-bottom: 10px;
 }
 
-/* Updated header layout */
 header {
   background-color: var(--primary);
   color: var(--text-light);
@@ -84,7 +83,6 @@ header {
   box-sizing: border-box;
 }
 
-/* Updated nav structure to match new_index.css */
 nav {
   display: flex;
   justify-content: space-between;
@@ -139,21 +137,30 @@ nav a {
   transition: var(--transition);
   border-radius: 5px;
   position: relative;
+  font-weight: 600;
+  transform: scale(1);
 }
 
 nav a:hover,
 nav a.active {
   background-color: var(--accent);
   color: #fff;
-  font-weight: 600;
   box-shadow: var(--shadow-sm);
+  transform: scale(1.05);
 }
 
-/* Updated user controls layout */
 .user-controls {
   display: flex;
   align-items: center;
   gap: 1rem;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.user-controls.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .login-btn,
@@ -190,27 +197,26 @@ nav a.active {
   box-shadow: var(--shadow-sm);
 }
 
-/* Updated dropdown styles */
 .dropdown {
   position: relative;
   display: inline-block;
 }
 
-.dropdown > a {
+.dropdown>a {
   cursor: pointer;
   display: flex;
   align-items: center;
   color: var(--text-light);
 }
 
-.dropdown > a::after {
+.dropdown>a::after {
   content: '▼';
   font-size: 0.6rem;
   margin-left: 0.5rem;
   transition: transform 0.2s ease;
 }
 
-.dropdown:hover > a::after {
+.dropdown:hover>a::after {
   transform: rotate(180deg);
 }
 
@@ -298,26 +304,26 @@ footer p {
   margin: 0;
 }
 
-/* Responsive styles adapted from new_index.css but maintaining your styling */
 @media (max-width: 900px) {
   nav {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .nav-main {
     margin: 1rem 0;
     flex-wrap: wrap;
     width: 100%;
     gap: 0.5rem;
   }
-  
-  .nav-main a, .dropdown {
+
+  .nav-main a,
+  .dropdown {
     width: 100%;
     padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-color);
   }
-  
+
   .dropdown-menu {
     position: static;
     box-shadow: none;
@@ -328,26 +334,27 @@ footer p {
     margin-top: 0.5rem;
     display: none;
   }
-  
+
   .dropdown:hover .dropdown-menu {
     display: block;
   }
-  
+
   .dropdown-menu a {
     padding-left: 1rem;
   }
-  
+
   .user-controls {
     width: 100%;
     margin-top: 1rem;
     justify-content: space-between;
   }
-  
-  .login-btn, .signup-btn {
+
+  .login-btn,
+  .signup-btn {
     width: 48%;
     text-align: center;
   }
-  
+
   main {
     margin-top: 160px;
   }
