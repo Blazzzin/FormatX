@@ -8,3 +8,5 @@ services/file-service/.env
 services/file-service/__pycache__
 frontend/templates/profile.html
 frontend/static/js/profile.js
+api-gateway/.env
+api-gateway/__pycache__
