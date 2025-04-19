@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 from db import files_collection
 from models import File
 from dotenv import load_dotenv
+from helpers import save_pdf, parse_page_ranges, write_pdf
+
 load_dotenv()
 
 file_bp = Blueprint('file', __name__)
@@ -43,10 +45,11 @@ def pdf_merge():
 
     saved_files = []
     for file in files:
-        if file.filename.endswith('.pdf'):
-            file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-            file.save(file_path)
+        try:
+            file_path = save_pdf(file, UPLOAD_FOLDER, prefix='uploaded')
             saved_files.append(file_path)
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
 
     if saved_files:
         merger = PdfWriter()
@@ -55,21 +58,16 @@ def pdf_merge():
             for page in reader.pages:
                 merger.add_page(page)
 
-        merged_filename = f'merged_{datetime.utcnow().strftime("%Y%m%d%H%M%S")}.pdf'
-        merged_file_path = os.path.join(MERGED_FOLDER, merged_filename)
-        with open(merged_file_path, 'wb') as merged_pdf:
-            merger.write(merged_pdf)
+        merged_filename, merged_file_path = write_pdf(merger, MERGED_FOLDER, prefix='merged')
 
         for file_path in saved_files:
             os.remove(file_path)
 
         user_id = get_user_id_from_token()
-        file_entry = File(
-            user_id=user_id, filename=merged_filename, s3_url=merged_file_path)
+        file_entry = File(user_id=user_id, filename=merged_filename, s3_url=merged_file_path)
         files_collection.insert_one(file_entry.to_dict())
         
         merged_file_url = f'/download/{merged_filename}'
-        
         return jsonify({"message": "PDFs merged successfully", "merged_file_url": merged_file_url})
 
     return jsonify({"error": "No PDFs to merge"}), 400
@@ -80,17 +78,16 @@ def pdf_organize():
         return jsonify({"error": "No file uploaded"}), 400
 
     file = request.files['file']
-    if not file.filename.endswith('.pdf'):
-        return jsonify({"error": "Uploaded file is not a valid PDF"}), 400
-
-    uploaded_file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(uploaded_file_path)
+    try:
+        uploaded_file_path = save_pdf(file, UPLOAD_FOLDER, prefix='uploaded')
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
 
     try:
-        pages_order = request.form.get('pages')
-        if not pages_order:
+        pages_order_text = request.form.get('pages')
+        if not pages_order_text:
             return jsonify({"error": "Page order not provided"}), 400
-        pages_order = list(map(int, pages_order.strip('[]').split(',')))
+        pages_order = list(map(int, pages_order_text.strip('[]').split(',')))
     except ValueError:
         return jsonify({"error": "Invalid page order format"}), 400
 
@@ -103,16 +100,11 @@ def pdf_organize():
             else:
                 return jsonify({"error": f"Page number {page_num} is out of range"}), 400
 
-        organized_filename = f'organized_{datetime.utcnow().strftime("%Y%m%d%H%M%S")}.pdf'
-        organized_file_path = os.path.join(MERGED_FOLDER, organized_filename)
-        with open(organized_file_path, 'wb') as organized_pdf:
-            writer.write(organized_pdf)
-
+        organized_filename, organized_file_path = write_pdf(writer, MERGED_FOLDER, prefix='organized')
         os.remove(uploaded_file_path)
 
         user_id = get_user_id_from_token()
-        file_entry = File(
-            user_id=user_id, filename=organized_filename, s3_url=organized_file_path)
+        file_entry = File(user_id=user_id, filename=organized_filename, s3_url=organized_file_path)
         files_collection.insert_one(file_entry.to_dict())
 
         return jsonify({"message": "PDF reorganized successfully", "organized_file_url": f'/download/{organized_filename}'})
@@ -126,27 +118,17 @@ def pdf_split():
         return jsonify({"error": "No file uploaded"}), 400
 
     file = request.files['file']
-    if not file.filename.endswith('.pdf'):
-        return jsonify({"error": "Uploaded file is not a valid PDF"}), 400
-
-    uploaded_file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(uploaded_file_path)
+    try:
+        uploaded_file_path = save_pdf(file, UPLOAD_FOLDER, prefix='uploaded')
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
 
     try:
         ranges_text = request.form.get('ranges')
         if not ranges_text:
             return jsonify({"error": "Page ranges not provided"}), 400
 
-        ranges = []
-        for range_str in ranges_text.split(','):
-            range_str = range_str.strip()
-            if '-' in range_str:
-                start, end = map(int, range_str.split('-'))
-                ranges.append((start, end))
-            else:
-                page = int(range_str)
-                ranges.append((page, page))
-
+        ranges = parse_page_ranges(ranges_text)
         split_files = []
         reader = PdfReader(uploaded_file_path)
         total_pages = len(reader.pages)
@@ -159,10 +141,7 @@ def pdf_split():
             for page_num in range(start - 1, end):
                 writer.add_page(reader.pages[page_num])
 
-            split_filename = f'split_{start}_{end}_{datetime.utcnow().strftime("%Y%m%d%H%M%S")}.pdf'
-            split_path = os.path.join(MERGED_FOLDER, split_filename)
-            with open(split_path, 'wb') as split_pdf:
-                writer.write(split_pdf)
+            split_filename, split_path = write_pdf(writer, MERGED_FOLDER, prefix='split', extra=f"{start}_{end}")
             
             user_id = get_user_id_from_token()
             file_entry = File(user_id=user_id, filename=split_filename, s3_url=split_path)
