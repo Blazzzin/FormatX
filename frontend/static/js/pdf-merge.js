@@ -1,3 +1,6 @@
+import { renderPDFPreview } from './utils/pdfUtils.js';
+import { enableDragAndDrop } from './utils/dragUtils.js';
+
 const MAX_FILES = 20;
 let filesList = [];
 
@@ -59,41 +62,10 @@ function handleFileSelect(event) {
         }
     });
 
-    enableDragAndDrop();
-    mergeButton.disabled = filesList.length === 0;
-}
-
-function renderPDFPreview(file, container) {
-    if (file.type !== 'application/pdf') return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const pdfData = new Uint8Array(e.target.result);
-        pdfjsLib.getDocument(pdfData).promise.then(pdf => {
-            pdf.getPage(1).then(page => {
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale });
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                page.render({ canvasContext: context, viewport }).promise.then(() => {
-                    container.appendChild(canvas);
-                });
-            });
-        });
-    };
-    reader.readAsArrayBuffer(file);
-}
-
-function enableDragAndDrop() {
-    new Sortable(fileListContainer, {
-        animation: 150,
-        onEnd: () => {
-            filesList = Array.from(fileListContainer.children).map(item => item.file);
-        }
+    enableDragAndDrop(fileListContainer, () => {
+        filesList = Array.from(fileListContainer.children).map(item => item.file);
     });
+    mergeButton.disabled = filesList.length === 0;
 }
 
 const API_BASE_URL_MERGE = 'http://localhost:5000/api/files';

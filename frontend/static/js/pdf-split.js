@@ -1,3 +1,5 @@
+import { renderPagePreview } from './utils/pdfUtils.js';
+
 const fileInput = document.getElementById('file-input');
 const pageListContainer = document.getElementById('page-list');
 const defaultText = document.getElementById('default-text');
@@ -51,23 +53,6 @@ function renderPDFPreviews(pdf) {
             pageListContainer.appendChild(pagePreview);
         });
     }
-}
-
-function renderPagePreview(page, container) {
-    const scale = 1.5;
-    const viewport = page.getViewport({ scale });
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
-
-    page.render({
-        canvasContext: context,
-        viewport: viewport
-    }).promise.then(() => {
-        container.appendChild(canvas);
-    });
 }
 
 function validatePageRanges(event) {

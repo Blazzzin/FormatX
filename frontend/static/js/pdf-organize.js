@@ -1,3 +1,6 @@
+import { renderPagePreview } from './utils/pdfUtils.js';
+import { enableDragAndDrop } from './utils/dragUtils.js';
+
 const fileInput = document.getElementById('file-input');
 const pageListContainer = document.getElementById('page-list');
 const defaultText = document.getElementById('default-text');
@@ -51,40 +54,20 @@ function renderPDFPages(file) {
                     });
                     pageItem.appendChild(removeButton);
 
-                    renderPDFPreview(page, previewContainer);
+                    renderPagePreview(page, previewContainer);
 
                     pageListContainer.appendChild(pageItem);
                     pagesList.push(pageNum);
 
-                    enableDragAndDrop();
+                    enableDragAndDrop(pageListContainer, () => {
+                        pagesList = Array.from(pageListContainer.children).map(item => parseInt(item.dataset.pageNum));
+                    });
                     organizeButton.disabled = false;
                 });
             }
         });
     };
     reader.readAsArrayBuffer(file);
-}
-
-function renderPDFPreview(page, container) {
-    const scale = 1.5;
-    const viewport = page.getViewport({ scale });
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
-    page.render({ canvasContext: context, viewport }).promise.then(() => {
-        container.appendChild(canvas);
-    });
-}
-
-function enableDragAndDrop() {
-    new Sortable(pageListContainer, {
-        animation: 150,
-        onEnd: () => {
-            pagesList = Array.from(pageListContainer.children).map(item => parseInt(item.dataset.pageNum));
-        }
-    });
 }
 
 const API_BASE_URL_ORG = 'http://localhost:5000/api/files';
