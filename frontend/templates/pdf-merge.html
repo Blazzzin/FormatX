@@ -40,6 +40,14 @@
     <center>
         <button type="submit" class="merge-button" disabled>Merge PDF</button>
     </center>
+    <div id="loading-spinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Merging Your Files...</p>
+    </div>
+    <div id="download-container" class="download-container" style="display: none;">
+        <p>Your file is ready!</p>
+        <a id="download-link" class="download-link" href="#" download>Download File</a>
+    </div>
 </form>
 {% endblock %}
 
