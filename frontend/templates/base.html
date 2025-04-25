@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    {% block extra_styles %}{% endblock %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+
+    <title>{% block title %}FormatX{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='assets/logo.png') }}" />
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="{{ url_for('home') }}" style="text-decoration: none;"><span>Format<span
+                        class="x-highlight">X</span></span></a>
+        </div>
+        <nav>
+            <div class="nav-main">
+                <a href="{{ url_for('home') }}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+                <a href="{{ url_for('pdf_merge') }}" class="{% if 'pdf-merge' in request.path %}active{% endif %}">Merge
+                    PDF</a>
+                <a href="{{ url_for('pdf_organize') }}"
+                    class="{% if 'pdf-organize' in request.path %}active{% endif %}">Re-Organize PDF</a>
+                <a href="{{ url_for('pdf_split') }}" class="{% if 'pdf-split' in request.path %}active{% endif %}">Split
+                    PDF</a>
+
+                <div class="dropdown">
+                    <a>Convert</a>
+                    <div class="dropdown-menu">
+                        <a href="">PDF to Word</a>
+                        <a href="">Word to PDF</a>
+                        <a href="">PDF to PowerPoint</a>
+                        <a href="">PowerPoint to PDF</a>
+                        <a href="">PDF to Image</a>
+                        <a href="">Image to PDF</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a>More Tools</a>
+                    <div class="dropdown-menu">
+                        <a href="">Compress PDF</a>
+                        <a href="">Edit PDF</a>
+                        <a href="">PDF to Text</a>
+                        <a href="">Add Watermark</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-controls">
+            </div>
+        </nav>
+    </header>
+
+    {% if self.content() %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    {% endif %}
+
+    {% if self.file_upload_section() %}
+    <div class="file-upload-section">
+        {% block file_upload_section %}{% endblock %}
+    </div>
+    {% endif %}
+
+    {% if self.auth_container() %}
+    <div class="auth-container">
+        {% block auth_container %}{% endblock %}
+    </div>
+    {% endif %}
+
+    <footer>
+        <p>&copy; 2025 FormatX. All Rights Reserved.</p>
+    </footer>
+
+    {% block pre_scripts %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    {% block post_scripts %}{% endblock %}
+</body>
+
+</html>
