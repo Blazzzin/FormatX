@@ -10,3 +10,4 @@ frontend/templates/profile.html
 frontend/static/js/profile.js
 api-gateway/.env
 api-gateway/__pycache__
+converted_docs/
