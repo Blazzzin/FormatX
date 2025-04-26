@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from helpers import save_pdf, parse_page_ranges, write_pdf
 import zipfile
 import io
+from pdf2docx import Converter
 
 load_dotenv()
 
@@ -17,9 +18,11 @@ file_bp = Blueprint('file', __name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 MERGED_FOLDER = os.path.join(BASE_DIR, 'merged_pdfs')
+CONVERTED_FOLDER = os.path.join(BASE_DIR, 'converted_docs')
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(MERGED_FOLDER, exist_ok=True)
+os.makedirs(CONVERTED_FOLDER, exist_ok=True)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -178,8 +181,69 @@ def pdf_split():
 
     except Exception as e:
         return jsonify({"error": f"Failed to split PDF: {str(e)}"}), 500
+    
+@file_bp.route('/convert/pdf-to-word', methods=['POST'])
+def pdf_to_word():
+    if 'files[]' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    pdf_files = request.files.getlist('files[]')
+    if not pdf_files or all(f.filename == '' for f in pdf_files):
+        return jsonify({"error": "No valid files uploaded"}), 400
+
+    user_id = get_user_id_from_token()
+    converted_paths = []
+
+    for f in pdf_files:
+        try:
+            pdf_path = save_pdf(f, UPLOAD_FOLDER, prefix='uploaded')
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
+
+        name, _      = os.path.splitext(f.filename)
+        timestamp    = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        docx_name    = f"{name}_{timestamp}.docx"
+        docx_path    = os.path.join(CONVERTED_FOLDER, docx_name)
+
+        cv = Converter(pdf_path)
+        cv.convert(docx_path, start=0, end=None)
+        cv.close()
+        os.remove(pdf_path)
+
+        entry = File(
+            user_id=user_id,
+            filename=docx_name,
+            s3_url=docx_path
+        )
+        files_collection.insert_one(entry.to_dict())  
+
+        converted_paths.append((docx_name, docx_path))
+
+    if len(converted_paths) == 1:
+        name, _ = converted_paths[0]
+        return jsonify({
+            "message": "Conversion successful",
+            "file_url": f"/download/{name}",
+            "filename": name
+        }), 200
+
+    zip_name = f"pdf2word_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
+    zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
+    with zipfile.ZipFile(zip_path, 'w') as zf:
+        for name, path in converted_paths:
+            zf.write(path, arcname=name)
+            os.remove(path)
+
+    return jsonify({
+        "message": "Multiple conversions successful",
+        "zip_url": f"/download/{zip_name}",
+        "filename": zip_name
+    }), 200
 
 @file_bp.route('/download/<filename>')
 def download(filename):
-    file_path = os.path.join(MERGED_FOLDER, filename)
-    return send_file(file_path, as_attachment=True)
+    for folder in (MERGED_FOLDER, CONVERTED_FOLDER):
+        file_path = os.path.join(folder, filename)
+        if os.path.isfile(file_path):
+            return send_file(file_path, as_attachment=True)
+    return jsonify({"error": "File not found"}), 404
