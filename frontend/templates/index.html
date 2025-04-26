@@ -1,103 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/index.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <title>Home - FormatX</title>
-    <link rel="icon" href="../static/assets/logo.png">
-</head>
+{% block title %}Home - FormatX{% endblock %}
 
-<body>
-    <header>
-        <div class="logo">
-            <a href="./" style="text-decoration: none;"><span>Format<span class="x-highlight">X</span></span></a>
-        </div>
-        <nav>
-            <div class="nav-main">
-                <a href="./" class="active">Home</a>
-                <a href="/pdf-merge">Merge PDF</a>
-                <a href="/pdf-organize">Re-Organize PDF</a>
-                <a href="/pdf-split">Split PDF</a>
-                <div class="dropdown">
-                    <a>Convert</a>
-                    <div class="dropdown-menu">
-                        <a href="">PDF to Word</a>
-                        <a href="">Word to PDF</a>
-                        <a href="">PDF to PowerPoint</a>
-                        <a href="">PowerPoint to PDF</a>
-                        <a href="">PDF to Image</a>
-                        <a href="">Image to PDF</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <a>More Tools</a>
-                    <div class="dropdown-menu">
-                        <a href="">Compress PDF</a>
-                        <a href="">Edit PDF</a>
-                        <a href="">PDF to Text</a>
-                        <a href="">Add Watermark</a>
-                    </div>
-                </div>
-            </div>
-            <div class="user-controls">
-                <a href="/login" class="login-btn">Login</a>
-                <a href="/signup" class="signup-btn">Sign Up</a>
-            </div>
-        </nav>
-    </header>
+{% block content %}
+<section class="intro">
+    <h1>Welcome to FormatX</h1>
+    <p>
+        FormatX is your all-in-one solution for managing and transforming digital documents with
+        ease. Whether you're looking to organize, convert, merge, or split files, FormatX simplifies the
+        process, saving you time and effort.
+    </p>
+</section>
 
-    <main>
-        <section class="intro">
-            <h1>Welcome to FormatX</h1>
-            <p>
-                FormatX is your all-in-one solution for managing and transforming digital documents with
-                ease. Whether you're looking to organize, convert, merge, or split files, FormatX simplifies the
-                process, saving you time and effort.
-            </p>
-        </section>
+<section class="features">
+    <h2>What Can You Do with FormatX?</h2>
+    <ul>
+        <li><strong>Merge PDFs:</strong> Combine multiple PDF files into a single, streamlined document in just
+            a few clicks.</li>
+        <li><strong>Organize PDFs:</strong> Rearrange, rotate, or delete pages to create the perfect PDF.</li>
+        <li><strong>Split PDFs:</strong> Extract specific pages or divide large PDF files into smaller,
+            manageable parts.</li>
+        <li><strong>PDF to Word:</strong> Convert PDFs to editable Word documents while retaining formatting and
+            quality.</li>
+    </ul>
+</section>
 
-        <section class="features">
-            <h2>What Can You Do with FormatX?</h2>
-            <ul>
-                <li><strong>Merge PDFs:</strong> Combine multiple PDF files into a single, streamlined document in just
-                    a few clicks.</li>
-                <li><strong>Organize PDFs:</strong> Rearrange, rotate, or delete pages to create the perfect PDF.</li>
-                <li><strong>Split PDFs:</strong> Extract specific pages or divide large PDF files into smaller,
-                    manageable parts.</li>
-                <li><strong>PDF to Word:</strong> Convert PDFs to editable Word documents while retaining formatting and
-                    quality.</li>
-            </ul>
-        </section>
+<section class="why-choose-us">
+    <h2>Why Choose FormatX?</h2>
+    <ul>
+        <li><strong>User-Friendly Interface:</strong> Simple, intuitive navigation makes document management
+            stress-free.</li>
+        <li><strong>Lightning-Fast Processing:</strong> Handle even large files in seconds, so you can focus on
+            your tasks.</li>
+        <li><strong>Secure and Reliable:</strong> Your files are processed with the utmost care and privacy in
+            mind.</li>
+    </ul>
+</section>
 
-        <section class="why-choose-us">
-            <h2>Why Choose FormatX?</h2>
-            <ul>
-                <li><strong>User-Friendly Interface:</strong> Simple, intuitive navigation makes document management
-                    stress-free.</li>
-                <li><strong>Lightning-Fast Processing:</strong> Handle even large files in seconds, so you can focus on
-                    your tasks.</li>
-                <li><strong>Secure and Reliable:</strong> Your files are processed with the utmost care and privacy in
-                    mind.</li>
-            </ul>
-        </section>
-
-        <section class="cta">
-            <h2>Get Started Today!</h2>
-            <p>With FormatX, document and image management has never been easier. Explore our features and see how we
-                can simplify your workflow. Choose an option from the menu above to get started!</p>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 FormatX. All Rights Reserved.</p>
-    </footer>
-
-    <script src="../static/js/auth.js"></script>
-</body>
-
-</html>
+<section class="cta">
+    <h2>Get Started Today!</h2>
+    <p>With FormatX, document and image management has never been easier. Explore our features and see how we
+        can simplify your workflow. Choose an option from the menu above to get started!</p>
+</section>
+{% endblock %}

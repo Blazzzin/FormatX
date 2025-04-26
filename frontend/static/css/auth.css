@@ -59,7 +59,6 @@
     box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
 }
 
-/* Auth Button */
 .auth-button {
     display: block;
     width: 100%;
@@ -122,7 +121,6 @@
     transform: scaleX(1);
 }
 
-/* Error Message */
 .error-message {
     background-color: #ffebee;
     color: #c62828;
@@ -135,7 +133,6 @@
     animation: fadeIn 0.3s ease;
 }
 
-/* Success Message */
 .success-message {
     background-color: #e8f5e9;
     color: #2e7d32;
@@ -160,7 +157,6 @@
     }
 }
 
-/* Profile Container */
 #profile-container {
     text-align: center;
 }
@@ -195,7 +191,6 @@
     margin-right: 5px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .auth-container {
         margin: 80px 20px 40px;

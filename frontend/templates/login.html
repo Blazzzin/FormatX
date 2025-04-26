@@ -1,81 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/index.css">
-    <link rel="stylesheet" href="../static/css/auth.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <title>Login - FormatX</title>
-    <link rel="icon" href="../static/assets/logo.png">
-</head>
+{% block title %}Login - FormatX{% endblock %}
 
-<body>
-    <header>
-        <div class="logo">
-            <a href="./" style="text-decoration: none;"><span>Format<span class="x-highlight">X</span></span></a>
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block auth_container %}
+<div class="auth-form">
+    <h1>Login</h1>
+    <div id="error-message" class="error-message"></div>
+    <form id="login-form">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
         </div>
-        <nav>
-            <div class="nav-main">
-                <a href="./">Home</a>
-                <a href="/pdf-merge">Merge PDF</a>
-                <a href="/pdf-organize">Re-Organize PDF</a>
-                <a href="/pdf-split">Split PDF</a>
-                <div class="dropdown">
-                    <a>Convert</a>
-                    <div class="dropdown-menu">
-                        <a href="">PDF to Word</a>
-                        <a href="">Word to PDF</a>
-                        <a href="">PDF to PowerPoint</a>
-                        <a href="">PowerPoint to PDF</a>
-                        <a href="">PDF to Image</a>
-                        <a href="">Image to PDF</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <a>More Tools</a>
-                    <div class="dropdown-menu">
-                        <a href="">Compress PDF</a>
-                        <a href="">Edit PDF</a>
-                        <a href="">PDF to Text</a>
-                        <a href="">Add Watermark</a>
-                    </div>
-                </div>
-            </div>
-            <div class="user-controls">
-                <a href="/login" class="login-btn active">Login</a>
-                <a href="/signup" class="signup-btn">Sign Up</a>
-            </div>
-        </nav>
-    </header>
-
-    <div class="auth-container">
-        <div class="auth-form">
-            <h1>Login</h1>
-            <div id="error-message" class="error-message"></div>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="auth-button">Login</button>
-            </form>
-            <p class="auth-redirect">Don't have an account? <a href="/signup">Sign Up</a></p>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
         </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2025 FormatX. All Rights Reserved.</p>
-    </footer>
-
-    <script src="../static/js/auth.js"></script>
-</body>
-
-</html>
+        <button type="submit" class="auth-button">Login</button>
+    </form>
+    <p class="auth-redirect">Don't have an account? <a href="/signup">Sign Up</a></p>
+</div>
+{% endblock %}

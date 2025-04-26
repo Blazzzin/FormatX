@@ -1,7 +1,14 @@
+import { renderPagePreview } from './utils/pdfUtils.js';
+import { enableDragAndDrop } from './utils/dragUtils.js';
+import { handleDownloadFlow } from './utils/fileUtils.js';
+
 const fileInput = document.getElementById('file-input');
 const pageListContainer = document.getElementById('page-list');
 const defaultText = document.getElementById('default-text');
 const organizeButton = document.querySelector('.organize-button');
+const loadingSpinner = document.getElementById('loading-spinner');
+const downloadContainer = document.getElementById('download-container');
+const downloadLink = document.getElementById('download-link');
 
 let pagesList = [];
 
@@ -51,12 +58,14 @@ function renderPDFPages(file) {
                     });
                     pageItem.appendChild(removeButton);
 
-                    renderPDFPreview(page, previewContainer);
+                    renderPagePreview(page, previewContainer);
 
                     pageListContainer.appendChild(pageItem);
                     pagesList.push(pageNum);
 
-                    enableDragAndDrop();
+                    enableDragAndDrop(pageListContainer, () => {
+                        pagesList = Array.from(pageListContainer.children).map(item => parseInt(item.dataset.pageNum));
+                    });
                     organizeButton.disabled = false;
                 });
             }
@@ -65,31 +74,9 @@ function renderPDFPages(file) {
     reader.readAsArrayBuffer(file);
 }
 
-function renderPDFPreview(page, container) {
-    const scale = 1.5;
-    const viewport = page.getViewport({ scale });
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
-    page.render({ canvasContext: context, viewport }).promise.then(() => {
-        container.appendChild(canvas);
-    });
-}
-
-function enableDragAndDrop() {
-    new Sortable(pageListContainer, {
-        animation: 150,
-        onEnd: () => {
-            pagesList = Array.from(pageListContainer.children).map(item => parseInt(item.dataset.pageNum));
-        }
-    });
-}
-
 const API_BASE_URL_ORG = 'http://localhost:5000/api/files';
 
-document.getElementById('organizeForm').addEventListener('submit', function (event) {
+document.getElementById('organizeForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const formData = new FormData();
@@ -102,28 +89,18 @@ document.getElementById('organizeForm').addEventListener('submit', function (eve
         'Authorization': `Bearer ${jwtToken}`
     } : {};
 
-    fetch(`${API_BASE_URL_ORG}/organize`, {
+    const fetchPromise = fetch(`${API_BASE_URL_ORG}/organize`, {
         method: 'POST',
         headers: headers,
         body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.organized_file_url) {
-                const downloadLink = document.createElement('a');
-                downloadLink.href = `${API_BASE_URL_ORG}${data.organized_file_url}`;
-                downloadLink.download = 'organized_output.pdf';
-                downloadLink.target = '_blank';
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                alert('PDF reorganized successfully!');
-            } else if (data.error) {
-                alert(data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error reorganizing PDF');
-        });
+    }).then(response => response.json());
+
+    await handleDownloadFlow({
+        fetchPromise,
+        downloadContainer,
+        spinner: loadingSpinner,
+        button: organizeButton,
+        downloadLink,
+        responseKey: 'organized_file_url'
+    });
 });
