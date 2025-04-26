@@ -93,8 +93,8 @@ document.getElementById('mergeForm').addEventListener('submit', async function (
         fetchPromise,
         downloadContainer,
         spinner: loadingSpinner,
-        mergeButton,
+        button: mergeButton,
         downloadLink,
-        filenameFallback: 'merged_output.pdf'
+        responseKey: 'merged_file_url'
     });
 });

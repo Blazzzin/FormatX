@@ -1,4 +1,5 @@
 import { renderPagePreview } from './utils/pdfUtils.js';
+import { handleDownloadFlow } from './utils/fileUtils.js';
 
 const fileInput = document.getElementById('file-input');
 const pageListContainer = document.getElementById('page-list');
@@ -7,6 +8,9 @@ const splitControls = document.getElementById('split-controls');
 const splitButton = document.querySelector('.split-button');
 const pageRangesInput = document.getElementById('page-ranges');
 const totalPagesCount = document.getElementById('total-pages-count');
+const loadingSpinner = document.getElementById('loading-spinner');
+const downloadContainer = document.getElementById('download-container');
+const downloadLink = document.getElementById('download-link');
 
 let totalPages = 0;
 
@@ -94,7 +98,7 @@ function validatePageRanges(event) {
 
 const API_BASE_URL_SPLIT = 'http://localhost:5000/api/files';
 
-document.getElementById('splitForm').addEventListener('submit', function (event) {
+document.getElementById('splitForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const formData = new FormData();
@@ -107,30 +111,17 @@ document.getElementById('splitForm').addEventListener('submit', function (event)
         'Authorization': `Bearer ${jwtToken}`
     } : {};
 
-    fetch(`${API_BASE_URL_SPLIT}/split`, {
+    const fetchPromise = fetch(`${API_BASE_URL_SPLIT}/split`, {
         method: 'POST',
         headers: headers,
         body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.split_files) {
-                data.split_files.forEach((fileUrl, index) => {
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = `${API_BASE_URL_SPLIT}${fileUrl}`;
-                    downloadLink.download = `split_${index + 1}.pdf`;
-                    downloadLink.target = '_blank';
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
-                });
-                alert('PDF split successfully!');
-            } else if (data.error) {
-                alert(data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error splitting PDF');
-        });
+    }).then(response => response.json());
+
+    await handleDownloadFlow({
+        fetchPromise,
+        downloadContainer,
+        spinner: loadingSpinner,
+        button: splitButton,
+        downloadLink,
+    });
 });

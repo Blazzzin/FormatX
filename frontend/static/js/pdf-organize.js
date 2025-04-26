@@ -1,10 +1,14 @@
 import { renderPagePreview } from './utils/pdfUtils.js';
 import { enableDragAndDrop } from './utils/dragUtils.js';
+import { handleDownloadFlow } from './utils/fileUtils.js';
 
 const fileInput = document.getElementById('file-input');
 const pageListContainer = document.getElementById('page-list');
 const defaultText = document.getElementById('default-text');
 const organizeButton = document.querySelector('.organize-button');
+const loadingSpinner = document.getElementById('loading-spinner');
+const downloadContainer = document.getElementById('download-container');
+const downloadLink = document.getElementById('download-link');
 
 let pagesList = [];
 
@@ -72,7 +76,7 @@ function renderPDFPages(file) {
 
 const API_BASE_URL_ORG = 'http://localhost:5000/api/files';
 
-document.getElementById('organizeForm').addEventListener('submit', function (event) {
+document.getElementById('organizeForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const formData = new FormData();
@@ -85,28 +89,18 @@ document.getElementById('organizeForm').addEventListener('submit', function (eve
         'Authorization': `Bearer ${jwtToken}`
     } : {};
 
-    fetch(`${API_BASE_URL_ORG}/organize`, {
+    const fetchPromise = fetch(`${API_BASE_URL_ORG}/organize`, {
         method: 'POST',
         headers: headers,
         body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.organized_file_url) {
-                const downloadLink = document.createElement('a');
-                downloadLink.href = `${API_BASE_URL_ORG}${data.organized_file_url}`;
-                downloadLink.download = 'organized_output.pdf';
-                downloadLink.target = '_blank';
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                alert('PDF reorganized successfully!');
-            } else if (data.error) {
-                alert(data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error reorganizing PDF');
-        });
+    }).then(response => response.json());
+
+    await handleDownloadFlow({
+        fetchPromise,
+        downloadContainer,
+        spinner: loadingSpinner,
+        button: organizeButton,
+        downloadLink,
+        responseKey: 'organized_file_url'
+    });
 });

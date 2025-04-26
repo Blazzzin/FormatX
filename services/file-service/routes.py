@@ -7,6 +7,8 @@ from db import files_collection
 from models import File
 from dotenv import load_dotenv
 from helpers import save_pdf, parse_page_ranges, write_pdf
+import zipfile
+import io
 
 load_dotenv()
 
@@ -67,8 +69,7 @@ def pdf_merge():
         file_entry = File(user_id=user_id, filename=merged_filename, s3_url=merged_file_path)
         files_collection.insert_one(file_entry.to_dict())
         
-        merged_file_url = f'/download/{merged_filename}'
-        return jsonify({"message": "PDFs merged successfully", "merged_file_url": merged_file_url})
+        return jsonify({"message": "PDFs merged successfully", "file_url": f'/download/{merged_filename}'})
 
     return jsonify({"error": "No PDFs to merge"}), 400
 
@@ -107,7 +108,7 @@ def pdf_organize():
         file_entry = File(user_id=user_id, filename=organized_filename, s3_url=organized_file_path)
         files_collection.insert_one(file_entry.to_dict())
 
-        return jsonify({"message": "PDF reorganized successfully", "organized_file_url": f'/download/{organized_filename}'})
+        return jsonify({"message": "PDF reorganized successfully", "file_url": f'/download/{organized_filename}'})
 
     except Exception as e:
         return jsonify({"error": f"Failed to reorganize PDF: {str(e)}"}), 500
@@ -142,15 +143,39 @@ def pdf_split():
                 writer.add_page(reader.pages[page_num])
 
             split_filename, split_path = write_pdf(writer, MERGED_FOLDER, prefix='split', extra=f"{start}_{end}")
-            
+
             user_id = get_user_id_from_token()
             file_entry = File(user_id=user_id, filename=split_filename, s3_url=split_path)
             files_collection.insert_one(file_entry.to_dict())
 
-            split_files.append(f'/download/{split_filename}')
+            split_files.append(split_filename)
 
         os.remove(uploaded_file_path)
-        return jsonify({"message": "PDF split successfully", "split_files": split_files})
+
+        if len(split_files) == 1:
+            return jsonify({
+                "message": "PDF split successfully",
+                "file_url": f'/download/{split_files[0]}'
+            })
+        else:
+            zip_filename = f'split_{datetime.utcnow().strftime("%Y%m%d%H%M%S")}.zip'
+            zip_path = os.path.join(MERGED_FOLDER, zip_filename)
+
+            with zipfile.ZipFile(zip_path, 'w') as zipf:
+                for filename in split_files:
+                    file_path = os.path.join(MERGED_FOLDER, filename)
+                    zipf.write(file_path, arcname=filename)
+
+            for filename in split_files:
+                file_path = os.path.join(MERGED_FOLDER, filename)
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+
+            return jsonify({
+                "message": "PDFs split and zipped successfully",
+                "zip_url": f'/download/{zip_filename}'
+            })
+
     except Exception as e:
         return jsonify({"error": f"Failed to split PDF: {str(e)}"}), 500
 
