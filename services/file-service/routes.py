@@ -6,10 +6,11 @@ from datetime import datetime, timedelta
 from db import files_collection
 from models import File
 from dotenv import load_dotenv
-from helpers import save_pdf, parse_page_ranges, write_pdf
+from helpers import save_pdf, parse_page_ranges, write_pdf, save_word
 import zipfile
 import io
 from pdf2docx import Converter
+from docx2pdf import convert
 
 load_dotenv()
 
@@ -239,7 +240,71 @@ def pdf_to_word():
         "zip_url": f"/download/{zip_name}",
         "filename": zip_name
     }), 200
+    
+@file_bp.route('/convert/word-to-pdf', methods=['POST'])
+def word_to_pdf():
+    if 'files[]' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
 
+    word_files = request.files.getlist('files[]')
+    if not word_files or all(f.filename == '' for f in word_files):
+        return jsonify({"error": "No valid files uploaded"}), 400
+
+    user_id = get_user_id_from_token()
+    converted_paths = []
+
+    import pythoncom
+    pythoncom.CoInitialize()
+
+    try:
+        for f in word_files:
+            try:
+                word_path = save_word(f, UPLOAD_FOLDER, prefix='uploaded')
+            except ValueError as e:
+                return jsonify({"error": str(e)}), 400
+
+            name, _ = os.path.splitext(f.filename)
+            timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+            pdf_name = f"{name}_{timestamp}.pdf"
+            pdf_path = os.path.join(CONVERTED_FOLDER, pdf_name)
+
+            convert(word_path, pdf_path)
+            os.remove(word_path)
+
+            entry = File(
+                user_id=user_id,
+                filename=pdf_name,
+                s3_url=pdf_path
+            )
+            files_collection.insert_one(entry.to_dict())
+
+            converted_paths.append((pdf_name, pdf_path))
+
+    finally:
+        pythoncom.CoUninitialize()
+
+    if len(converted_paths) == 1:
+        name, _ = converted_paths[0]
+        return jsonify({
+            "message": "Conversion successful",
+            "file_url": f"/download/{name}",
+            "filename": name
+        }), 200
+
+    zip_name = f"word2pdf_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
+    zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
+
+    with zipfile.ZipFile(zip_path, 'w') as zf:
+        for name, path in converted_paths:
+            zf.write(path, arcname=name)
+            os.remove(path)
+
+    return jsonify({
+        "message": "Multiple conversions successful",
+        "zip_url": f"/download/{zip_name}",
+        "filename": zip_name
+    }), 200
+    
 @file_bp.route('/download/<filename>')
 def download(filename):
     for folder in (MERGED_FOLDER, CONVERTED_FOLDER):
