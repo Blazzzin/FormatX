@@ -45,15 +45,7 @@ def pdf_to_powerpoint():
 
 @app.route('/powerpoint-to-pdf')
 def powerpoint_to_pdf():
-    return render_template('powerpoint-to-pdf.html')
-
-@app.route('/pdf-to-image')
-def pdf_to_image():
-    return render_template('pdf-to-image.html')
-
-@app.route('/image-to-pdf')
-def image_to_pdf():
-    return render_template('image-to-pdf.html')
+    return render_template('ppt-to-pdf.html')
 
 if __name__ == '__main__':
     webbrowser.open('http://localhost:8000')

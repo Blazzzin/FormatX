@@ -43,10 +43,6 @@
                             class="{% if 'pdf-to-powerpoint' in request.path %}active{% endif %}">PDF to PowerPoint</a>
                         <a href="{{ url_for('powerpoint_to_pdf') }}"
                             class="{% if 'powerpoint-to-pdf' in request.path %}active{% endif %}">PowerPoint to PDF</a>
-                        <a href="{{ url_for('pdf_to_image') }}"
-                            class="{% if 'pdf-to-image' in request.path %}active{% endif %}">PDF to Image</a>
-                        <a href="{{ url_for('image_to_pdf') }}"
-                            class="{% if 'image-to-pdf' in request.path %}active{% endif %}">Image to PDF</a>
                     </div>
                 </div>
 
