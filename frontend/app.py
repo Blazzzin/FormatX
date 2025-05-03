@@ -41,7 +41,7 @@ def word_to_pdf():
 
 @app.route('/pdf-to-powerpoint')
 def pdf_to_powerpoint():
-    return render_template('pdf-to-powerpoint.html')
+    return render_template('pdf-to-ppt.html')
 
 @app.route('/powerpoint-to-pdf')
 def powerpoint_to_pdf():

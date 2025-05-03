@@ -107,6 +107,10 @@
     font-weight: 500;
 }
 
+.special-styling {
+    width: 230px;
+}
+
 @media (max-width: 768px) {
     .file-upload-section {
         padding: 20px;

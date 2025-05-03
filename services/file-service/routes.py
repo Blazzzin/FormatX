@@ -11,6 +11,7 @@ import zipfile
 import io
 from pdf2docx import Converter
 from docx2pdf import convert
+from pdf2pptx import convert_pdf2pptx
 
 load_dotenv()
 
@@ -292,6 +293,72 @@ def word_to_pdf():
         }), 200
 
     zip_name = f"word2pdf_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
+    zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
+
+    with zipfile.ZipFile(zip_path, 'w') as zf:
+        for name, path in converted_paths:
+            zf.write(path, arcname=name)
+            os.remove(path)
+
+    return jsonify({
+        "message": "Multiple conversions successful",
+        "zip_url": f"/download/{zip_name}",
+        "filename": zip_name
+    }), 200
+    
+@file_bp.route('/convert/pdf-to-ppt', methods=['POST'])
+def pdf_to_ppt():
+    if 'files[]' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    pdf_files = request.files.getlist('files[]')
+    if not pdf_files or all(f.filename == '' for f in pdf_files):
+        return jsonify({"error": "No valid files uploaded"}), 400
+
+    user_id = get_user_id_from_token()
+    converted_paths = []
+
+    for f in pdf_files:
+        try:
+            pdf_path = save_pdf(f, UPLOAD_FOLDER, prefix='uploaded')
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
+
+        name, _ = os.path.splitext(f.filename)
+        timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        pptx_name = f"{name}_{timestamp}.pptx"
+        pptx_path = os.path.join(CONVERTED_FOLDER, pptx_name)
+
+        try:
+            convert_pdf2pptx(
+                pdf_path,       
+                pptx_path,      
+                resolution=150, 
+                start_page=0,   
+                page_count=None 
+            )
+            os.remove(pdf_path)
+        except Exception as e:
+            return jsonify({"error": f"Conversion failed: {str(e)}"}), 500
+
+        entry = File(
+            user_id=user_id,
+            filename=pptx_name,
+            s3_url=pptx_path
+        )
+        files_collection.insert_one(entry.to_dict())
+
+        converted_paths.append((pptx_name, pptx_path))
+
+    if len(converted_paths) == 1:
+        name, _ = converted_paths[0]
+        return jsonify({
+            "message": "Conversion successful",
+            "file_url": f"/download/{name}",
+            "filename": name
+        }), 200
+
+    zip_name = f"pdf2ppt_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
     zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
 
     with zipfile.ZipFile(zip_path, 'w') as zf:
