@@ -37,3 +37,10 @@ def save_word(file, folder, prefix=''):
     file_path = os.path.join(folder, f"{prefix}_{file.filename}")
     file.save(file_path)
     return file_path
+
+def save_ppt(file, folder, prefix=''):
+    if not (file.filename.endswith('.pptx') or file.filename.endswith('.ppt')):
+        raise ValueError("Uploaded file is not a valid PowerPoint document")
+    file_path = os.path.join(folder, f"{prefix}_{file.filename}")
+    file.save(file_path)
+    return file_path

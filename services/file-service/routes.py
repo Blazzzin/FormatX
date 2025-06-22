@@ -6,12 +6,13 @@ from datetime import datetime, timedelta
 from db import files_collection
 from models import File
 from dotenv import load_dotenv
-from helpers import save_pdf, parse_page_ranges, write_pdf, save_word
+from helpers import save_pdf, parse_page_ranges, write_pdf, save_word, save_ppt
 import zipfile
-import io
 from pdf2docx import Converter
 from docx2pdf import convert
 from pdf2pptx import convert_pdf2pptx
+import comtypes.client
+import pythoncom
 
 load_dotenv()
 
@@ -359,6 +360,78 @@ def pdf_to_ppt():
         }), 200
 
     zip_name = f"pdf2ppt_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
+    zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
+
+    with zipfile.ZipFile(zip_path, 'w') as zf:
+        for name, path in converted_paths:
+            zf.write(path, arcname=name)
+            os.remove(path)
+
+    return jsonify({
+        "message": "Multiple conversions successful",
+        "zip_url": f"/download/{zip_name}",
+        "filename": zip_name
+    }), 200
+    
+@file_bp.route('/convert/ppt-to-pdf', methods=['POST'])
+def ppt_to_pdf():
+    if 'files[]' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    ppt_files = request.files.getlist('files[]')
+    if not ppt_files or all(f.filename == '' for f in ppt_files):
+        return jsonify({"error": "No valid files uploaded"}), 400
+
+    user_id = get_user_id_from_token()
+    converted_paths = []
+
+    # COM initialization
+    pythoncom.CoInitialize()
+
+    try:
+        for f in ppt_files:
+            try:
+                ppt_path = save_ppt(f, UPLOAD_FOLDER, prefix='uploaded')
+            except ValueError as e:
+                return jsonify({"error": str(e)}), 400
+
+            name, _ = os.path.splitext(f.filename)
+            timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+            pdf_name = f"{name}_{timestamp}.pdf"
+            pdf_path = os.path.join(CONVERTED_FOLDER, pdf_name)
+
+            try:
+                powerpoint = comtypes.client.CreateObject("PowerPoint.Application")
+                powerpoint.Visible = 1
+                presentation = powerpoint.Presentations.Open(ppt_path, WithWindow=False)
+                presentation.SaveAs(pdf_path, 32)  # 32 = PDF
+                presentation.Close()
+                powerpoint.Quit()
+                os.remove(ppt_path)
+            except Exception as e:
+                return jsonify({"error": f"Conversion failed: {str(e)}"}), 500
+
+            entry = File(
+                user_id=user_id,
+                filename=pdf_name,
+                s3_url=pdf_path
+            )
+            files_collection.insert_one(entry.to_dict())
+
+            converted_paths.append((pdf_name, pdf_path))
+
+    finally:
+        pythoncom.CoUninitialize()
+
+    if len(converted_paths) == 1:
+        name, _ = converted_paths[0]
+        return jsonify({
+            "message": "Conversion successful",
+            "file_url": f"/download/{name}",
+            "filename": name
+        }), 200
+
+    zip_name = f"ppt2pdf_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
     zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
 
     with zipfile.ZipFile(zip_path, 'w') as zf:
