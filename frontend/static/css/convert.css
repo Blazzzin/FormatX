@@ -1,0 +1,153 @@
+.file-item {
+    padding: 8px;
+    margin: 5px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    cursor: move;
+    width: 200px;
+    text-align: center;
+    word-wrap: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.file-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
+}
+
+.file-preview {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.file-item .remove-file {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.file-item .remove-file:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+}
+
+.pdf-preview-container {
+    margin-top: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.pdf-preview-container canvas {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.custom-file-upload {
+    background-color: #1abc9c;
+}
+
+.custom-file-upload:hover,
+.convert-button:hover,
+.clear-files:hover,
+.nav-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.custom-file-upload:hover {
+    background-color: #16a085;
+}
+
+.convert-button:hover {
+    background-color: #1abc9c;
+}
+
+.clear-files:hover {
+    background-color: #34495e;
+}
+
+.convert-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#file-limit-message {
+    color: #e74c3c;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.special-styling {
+    width: 230px;
+}
+
+@media (max-width: 768px) {
+    .file-upload-section {
+        padding: 20px;
+        margin: 15px;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .custom-file-upload,
+    .convert-button,
+    .clear-files {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .file-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 15px;
+    }
+
+    .file-preview {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .remove-file {
+        top: 5px;
+        right: 5px;
+    }
+
+    .file-name {
+        white-space: normal;
+        word-break: break-word;
+    }
+}

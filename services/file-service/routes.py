@@ -6,9 +6,13 @@ from datetime import datetime, timedelta
 from db import files_collection
 from models import File
 from dotenv import load_dotenv
-from helpers import save_pdf, parse_page_ranges, write_pdf
+from helpers import save_pdf, parse_page_ranges, write_pdf, save_word, save_ppt
 import zipfile
-import io
+from pdf2docx import Converter
+from docx2pdf import convert
+from pdf2pptx import convert_pdf2pptx
+import comtypes.client
+import pythoncom
 
 load_dotenv()
 
@@ -17,9 +21,11 @@ file_bp = Blueprint('file', __name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 MERGED_FOLDER = os.path.join(BASE_DIR, 'merged_pdfs')
+CONVERTED_FOLDER = os.path.join(BASE_DIR, 'converted_docs')
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(MERGED_FOLDER, exist_ok=True)
+os.makedirs(CONVERTED_FOLDER, exist_ok=True)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -178,8 +184,271 @@ def pdf_split():
 
     except Exception as e:
         return jsonify({"error": f"Failed to split PDF: {str(e)}"}), 500
+    
+@file_bp.route('/convert/pdf-to-word', methods=['POST'])
+def pdf_to_word():
+    if 'files[]' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
 
+    pdf_files = request.files.getlist('files[]')
+    if not pdf_files or all(f.filename == '' for f in pdf_files):
+        return jsonify({"error": "No valid files uploaded"}), 400
+
+    user_id = get_user_id_from_token()
+    converted_paths = []
+
+    for f in pdf_files:
+        try:
+            pdf_path = save_pdf(f, UPLOAD_FOLDER, prefix='uploaded')
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
+
+        name, _      = os.path.splitext(f.filename)
+        timestamp    = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        docx_name    = f"{name}_{timestamp}.docx"
+        docx_path    = os.path.join(CONVERTED_FOLDER, docx_name)
+
+        cv = Converter(pdf_path)
+        cv.convert(docx_path, start=0, end=None)
+        cv.close()
+        os.remove(pdf_path)
+
+        entry = File(
+            user_id=user_id,
+            filename=docx_name,
+            s3_url=docx_path
+        )
+        files_collection.insert_one(entry.to_dict())  
+
+        converted_paths.append((docx_name, docx_path))
+
+    if len(converted_paths) == 1:
+        name, _ = converted_paths[0]
+        return jsonify({
+            "message": "Conversion successful",
+            "file_url": f"/download/{name}",
+            "filename": name
+        }), 200
+
+    zip_name = f"pdf2word_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
+    zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
+    with zipfile.ZipFile(zip_path, 'w') as zf:
+        for name, path in converted_paths:
+            zf.write(path, arcname=name)
+            os.remove(path)
+
+    return jsonify({
+        "message": "Multiple conversions successful",
+        "zip_url": f"/download/{zip_name}",
+        "filename": zip_name
+    }), 200
+    
+@file_bp.route('/convert/word-to-pdf', methods=['POST'])
+def word_to_pdf():
+    if 'files[]' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    word_files = request.files.getlist('files[]')
+    if not word_files or all(f.filename == '' for f in word_files):
+        return jsonify({"error": "No valid files uploaded"}), 400
+
+    user_id = get_user_id_from_token()
+    converted_paths = []
+
+    import pythoncom
+    pythoncom.CoInitialize()
+
+    try:
+        for f in word_files:
+            try:
+                word_path = save_word(f, UPLOAD_FOLDER, prefix='uploaded')
+            except ValueError as e:
+                return jsonify({"error": str(e)}), 400
+
+            name, _ = os.path.splitext(f.filename)
+            timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+            pdf_name = f"{name}_{timestamp}.pdf"
+            pdf_path = os.path.join(CONVERTED_FOLDER, pdf_name)
+
+            convert(word_path, pdf_path)
+            os.remove(word_path)
+
+            entry = File(
+                user_id=user_id,
+                filename=pdf_name,
+                s3_url=pdf_path
+            )
+            files_collection.insert_one(entry.to_dict())
+
+            converted_paths.append((pdf_name, pdf_path))
+
+    finally:
+        pythoncom.CoUninitialize()
+
+    if len(converted_paths) == 1:
+        name, _ = converted_paths[0]
+        return jsonify({
+            "message": "Conversion successful",
+            "file_url": f"/download/{name}",
+            "filename": name
+        }), 200
+
+    zip_name = f"word2pdf_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
+    zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
+
+    with zipfile.ZipFile(zip_path, 'w') as zf:
+        for name, path in converted_paths:
+            zf.write(path, arcname=name)
+            os.remove(path)
+
+    return jsonify({
+        "message": "Multiple conversions successful",
+        "zip_url": f"/download/{zip_name}",
+        "filename": zip_name
+    }), 200
+    
+@file_bp.route('/convert/pdf-to-ppt', methods=['POST'])
+def pdf_to_ppt():
+    if 'files[]' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    pdf_files = request.files.getlist('files[]')
+    if not pdf_files or all(f.filename == '' for f in pdf_files):
+        return jsonify({"error": "No valid files uploaded"}), 400
+
+    user_id = get_user_id_from_token()
+    converted_paths = []
+
+    for f in pdf_files:
+        try:
+            pdf_path = save_pdf(f, UPLOAD_FOLDER, prefix='uploaded')
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
+
+        name, _ = os.path.splitext(f.filename)
+        timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        pptx_name = f"{name}_{timestamp}.pptx"
+        pptx_path = os.path.join(CONVERTED_FOLDER, pptx_name)
+
+        try:
+            convert_pdf2pptx(
+                pdf_path,       
+                pptx_path,      
+                resolution=150, 
+                start_page=0,   
+                page_count=None 
+            )
+            os.remove(pdf_path)
+        except Exception as e:
+            return jsonify({"error": f"Conversion failed: {str(e)}"}), 500
+
+        entry = File(
+            user_id=user_id,
+            filename=pptx_name,
+            s3_url=pptx_path
+        )
+        files_collection.insert_one(entry.to_dict())
+
+        converted_paths.append((pptx_name, pptx_path))
+
+    if len(converted_paths) == 1:
+        name, _ = converted_paths[0]
+        return jsonify({
+            "message": "Conversion successful",
+            "file_url": f"/download/{name}",
+            "filename": name
+        }), 200
+
+    zip_name = f"pdf2ppt_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
+    zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
+
+    with zipfile.ZipFile(zip_path, 'w') as zf:
+        for name, path in converted_paths:
+            zf.write(path, arcname=name)
+            os.remove(path)
+
+    return jsonify({
+        "message": "Multiple conversions successful",
+        "zip_url": f"/download/{zip_name}",
+        "filename": zip_name
+    }), 200
+    
+@file_bp.route('/convert/ppt-to-pdf', methods=['POST'])
+def ppt_to_pdf():
+    if 'files[]' not in request.files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    ppt_files = request.files.getlist('files[]')
+    if not ppt_files or all(f.filename == '' for f in ppt_files):
+        return jsonify({"error": "No valid files uploaded"}), 400
+
+    user_id = get_user_id_from_token()
+    converted_paths = []
+
+    # COM initialization
+    pythoncom.CoInitialize()
+
+    try:
+        for f in ppt_files:
+            try:
+                ppt_path = save_ppt(f, UPLOAD_FOLDER, prefix='uploaded')
+            except ValueError as e:
+                return jsonify({"error": str(e)}), 400
+
+            name, _ = os.path.splitext(f.filename)
+            timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+            pdf_name = f"{name}_{timestamp}.pdf"
+            pdf_path = os.path.join(CONVERTED_FOLDER, pdf_name)
+
+            try:
+                powerpoint = comtypes.client.CreateObject("PowerPoint.Application")
+                powerpoint.Visible = 1
+                presentation = powerpoint.Presentations.Open(ppt_path, WithWindow=False)
+                presentation.SaveAs(pdf_path, 32)  # 32 = PDF
+                presentation.Close()
+                powerpoint.Quit()
+                os.remove(ppt_path)
+            except Exception as e:
+                return jsonify({"error": f"Conversion failed: {str(e)}"}), 500
+
+            entry = File(
+                user_id=user_id,
+                filename=pdf_name,
+                s3_url=pdf_path
+            )
+            files_collection.insert_one(entry.to_dict())
+
+            converted_paths.append((pdf_name, pdf_path))
+
+    finally:
+        pythoncom.CoUninitialize()
+
+    if len(converted_paths) == 1:
+        name, _ = converted_paths[0]
+        return jsonify({
+            "message": "Conversion successful",
+            "file_url": f"/download/{name}",
+            "filename": name
+        }), 200
+
+    zip_name = f"ppt2pdf_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.zip"
+    zip_path = os.path.join(CONVERTED_FOLDER, zip_name)
+
+    with zipfile.ZipFile(zip_path, 'w') as zf:
+        for name, path in converted_paths:
+            zf.write(path, arcname=name)
+            os.remove(path)
+
+    return jsonify({
+        "message": "Multiple conversions successful",
+        "zip_url": f"/download/{zip_name}",
+        "filename": zip_name
+    }), 200
+    
 @file_bp.route('/download/<filename>')
 def download(filename):
-    file_path = os.path.join(MERGED_FOLDER, filename)
-    return send_file(file_path, as_attachment=True)
+    for folder in (MERGED_FOLDER, CONVERTED_FOLDER):
+        file_path = os.path.join(folder, filename)
+        if os.path.isfile(file_path):
+            return send_file(file_path, as_attachment=True)
+    return jsonify({"error": "File not found"}), 404

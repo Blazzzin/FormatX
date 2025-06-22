@@ -35,12 +35,14 @@
                 <div class="dropdown">
                     <a>Convert</a>
                     <div class="dropdown-menu">
-                        <a href="">PDF to Word</a>
-                        <a href="">Word to PDF</a>
-                        <a href="">PDF to PowerPoint</a>
-                        <a href="">PowerPoint to PDF</a>
-                        <a href="">PDF to Image</a>
-                        <a href="">Image to PDF</a>
+                        <a href="{{ url_for('pdf_to_word') }}"
+                            class="{% if 'pdf-to-word' in request.path %}active{% endif %}">PDF to Word</a>
+                        <a href="{{ url_for('word_to_pdf') }}"
+                            class="{% if 'word-to-pdf' in request.path %}active{% endif %}">Word to PDF</a>
+                        <a href="{{ url_for('pdf_to_powerpoint') }}"
+                            class="{% if 'pdf-to-powerpoint' in request.path %}active{% endif %}">PDF to PowerPoint</a>
+                        <a href="{{ url_for('powerpoint_to_pdf') }}"
+                            class="{% if 'powerpoint-to-pdf' in request.path %}active{% endif %}">PowerPoint to PDF</a>
                     </div>
                 </div>
 
@@ -48,9 +50,9 @@
                     <a>More Tools</a>
                     <div class="dropdown-menu">
                         <a href="">Compress PDF</a>
-                        <a href="">Edit PDF</a>
+                        <!-- <a href="">Edit PDF</a>
                         <a href="">PDF to Text</a>
-                        <a href="">Add Watermark</a>
+                        <a href="">Add Watermark</a> -->
                     </div>
                 </div>
             </div>

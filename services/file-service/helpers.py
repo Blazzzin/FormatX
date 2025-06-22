@@ -30,3 +30,17 @@ def write_pdf(writer, folder, prefix, extra=""):
     with open(path, 'wb') as f:
         writer.write(f)
     return filename, path
+
+def save_word(file, folder, prefix=''):
+    if not (file.filename.endswith('.docx') or file.filename.endswith('.doc')):
+        raise ValueError("Uploaded file is not a valid Word document")
+    file_path = os.path.join(folder, f"{prefix}_{file.filename}")
+    file.save(file_path)
+    return file_path
+
+def save_ppt(file, folder, prefix=''):
+    if not (file.filename.endswith('.pptx') or file.filename.endswith('.ppt')):
+        raise ValueError("Uploaded file is not a valid PowerPoint document")
+    file_path = os.path.join(folder, f"{prefix}_{file.filename}")
+    file.save(file_path)
+    return file_path
